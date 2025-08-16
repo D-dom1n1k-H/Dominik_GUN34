@@ -40,10 +40,13 @@ namespace Netologia.Homework
 
 		private void Spawn()
 		{
-			_ball = Instantiate(_ballPrefab, transform);
-			_ball.isKinematic = true;
-			_ready = true;
-		}
+            Vector3 spawnPos = transform.position + transform.forward * 1f; 
+            _ball = Instantiate(_ballPrefab, spawnPos, Quaternion.identity);
+            _ball.transform.SetParent(transform, worldPositionStays: true);
+
+            _ball.isKinematic = true;
+            _ready = true;
+        }
 
 		private void Start()
 		{

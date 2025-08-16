@@ -4,31 +4,53 @@ using UnityEngine;
 public class Mover : MonoBehaviour
 {
 	[SerializeField]
-	private float _moveTime = 1f;
+	private Vector3 _start;
 	[SerializeField]
-	private float _delayTime = 2f;
+    private Vector3 _end;
 	[SerializeField]
-	private Vector3[] _positions;
+	private float _speed;
+	[SerializeField]
+	private float _delay;
 
-	private IEnumerator Start()
+    private IEnumerator Start()
     {
-		if(_positions.Length < 2) yield break;
-		int prev = 0, curr = 1;
-		var time = 0f;
-		var transform = this.transform;
-		while(true)
-		{
-			transform.position = Vector3.Lerp(_positions[prev], _positions[curr], time / _moveTime);
-			time += Time.deltaTime;
-			if(time >= _moveTime)
-			{
-				time = 0f;
-				prev = curr;
-				curr = (curr + 1) % _positions.Length;
-				yield return new WaitForSeconds(_delayTime);
-			}
+		if (_speed <= 0.1f) { _speed = 6f; }
+		Rigidbody rb = GetComponent<Rigidbody>();
+		if (rb == null) { Debug.LogError("Rigidbody missing in Mover"); }
 
-			yield return null;
-		}
-	}
+        while (true)
+			{
+			if (Vector3.Distance(transform.position, _start) > 0.01f)
+			{
+				while (transform.position != _start)
+				{
+					Vector3 nextPos = Vector3.MoveTowards(rb.position, _start, _speed * Time.fixedDeltaTime);
+					rb.MovePosition(nextPos);
+                    yield return new WaitForFixedUpdate();
+                }
+            }
+			yield return new WaitForSeconds(_delay);
+
+				if (Vector3.Distance(transform.position, _end) > 0.01f)
+				{
+					while (transform.position != _end)
+					{
+                    Vector3 nextPos = Vector3.MoveTowards(rb.position, _end, _speed * Time.fixedDeltaTime);
+                    rb.MovePosition(nextPos);
+                    yield return new WaitForFixedUpdate();
+					}
+            }
+            yield return new WaitForSeconds(_delay);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+		Gizmos.DrawLine(_start, _end);
+
+		Gizmos.color = Color.cyan;
+		Gizmos.DrawSphere(_start, 0.5f);
+		Gizmos.DrawSphere(_end, 0.5f);
+    }
 }
