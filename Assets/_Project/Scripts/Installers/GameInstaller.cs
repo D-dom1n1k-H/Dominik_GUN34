@@ -1,8 +1,8 @@
 using Zenject;
-using Managers;
+using Korven.Managers;
 using UnityEngine;
 
-namespace Installers
+namespace Korven.Installers
 {
     public class GameInstaller : MonoInstaller
     {

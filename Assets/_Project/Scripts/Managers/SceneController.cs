@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Managers
+namespace Korven.Managers
 {
     public class SceneController : MonoBehaviour
     {
