@@ -304,6 +304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3890ad30794dcb44285ddd8b21561663, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _sceneController: {fileID: 678739032}
 --- !u!4 &30673350 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3513552606867830924, guid: 01364655807ce964ebd8816a11b2be6d, type: 3}
@@ -1957,6 +1958,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8094a4ff8a713347a2dfb841b3aeb8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  restartFr: {fileID: 1753751900}
+  restartingBg: {fileID: 1860072191}
 --- !u!1 &875724763
 GameObject:
   m_ObjectHideFlags: 0

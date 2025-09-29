@@ -18,6 +18,7 @@ namespace Korven.Units
         private Cell _nextCell;
         
         private float _progress;
+        
         [SerializeField] 
         private float moveSpeed = 2f;
         private bool _isMoving = false;

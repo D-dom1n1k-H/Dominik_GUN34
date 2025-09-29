@@ -1,15 +1,16 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Unity.VisualScripting;
-using Unit = Korven.Units.Unit;
+using Korven.Units;
 
 namespace Korven.Level.Board
 {
     public class Cell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
-        [SerializeField] private MeshRenderer focus;
-        [SerializeField] private MeshRenderer select;
+        [SerializeField]
+        private MeshRenderer focus;
+        [SerializeField]
+        private MeshRenderer select;
 
         private Cell UnitsCell;
 
@@ -22,6 +23,7 @@ namespace Korven.Level.Board
                 Debug.LogError("[Cell] Serializable field _focus of type MeshRenderer is null]");
                 return;
             }
+
             focus.enabled = false;
 
             if (select == null)
@@ -29,6 +31,7 @@ namespace Korven.Level.Board
                 Debug.LogError("[Cell] Serializable field _select of type MeshRenderer is null");
                 return;
             }
+
             select.enabled = false;
 
             Unit.OnFindUnitsCellEvent += FindUnitsCurrentCell;
