@@ -1,4 +1,5 @@
 using System;
+using Korven.Controllers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -9,10 +10,10 @@ namespace Korven.Managers
     public class InputManager : MonoBehaviour
     {
         [Inject]
-        private Controls _controls;              //Injected
+        private Controls _controls; //Injected
         [Inject]
         private SceneController _sceneController; //Injected
-        
+
         private bool _isPressed = false;
 
         [SerializeField]
@@ -22,29 +23,7 @@ namespace Korven.Managers
 
         private void Awake()
         {
-            if (_controls == null)
-            {
-                Debug.LogError("[InputManager] Controls could not be injected!");
-                return;
-            }
-
-            if (_sceneController == null)
-            {
-                Debug.LogError("[InputManager] SceneController could not be injected!");
-                return;
-            }
-
-            if (restartFr == null)
-            {
-                Debug.LogError("[InputManager] Restart image is missing!");
-                return;
-            }
-
-            if (restartingBg == null)
-            {
-                Debug.LogError("[InputManager] Restarting image is missing!");
-                return;
-            }
+            ValidateDependencies();
 
             restartFr.enabled = false;
 
@@ -66,6 +45,7 @@ namespace Korven.Managers
 
         private void OnEnable()
         {
+            _controls.Game.Enable();
             _controls.Game.Restart.started += Restart_started;
             _controls.Game.Restart.performed += Restart_performed;
             _controls.Game.Restart.canceled += Restart_canceled;
@@ -77,6 +57,7 @@ namespace Korven.Managers
             _controls.Game.Restart.performed -= Restart_performed;
             _controls.Game.Restart.canceled -= Restart_canceled;
         }
+
 
         private void Restart_started(InputAction.CallbackContext context)
         {
@@ -96,7 +77,24 @@ namespace Korven.Managers
         private void Restart_performed(InputAction.CallbackContext context)
         {
             _sceneController.OpenGameScene();
-            Debug.Log("[InputManager] GameScene was restarted successfully!");
+        }
+
+        private bool ValidateDependencies()
+        {
+            if (_controls == null)
+                throw new NullReferenceException("[InputManager] Controls could not be injected!");
+
+
+            if (_sceneController == null)
+                throw new NullReferenceException("[InputManager] SceneController could not be injected!");
+
+            if (restartFr == null)
+                throw new NullReferenceException("[InputManager] Restart image is missing!");
+
+            if (restartingBg == null)
+                throw new NullReferenceException("[InputManager] Restarting image is missing!");
+
+            return true;
         }
     }
 }

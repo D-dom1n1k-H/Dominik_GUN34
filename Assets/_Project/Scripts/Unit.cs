@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Korven.Level.Board;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Korven.Level.Board;
-using Vector3 = UnityEngine.Vector3;
 
 namespace Korven.Units
 {
@@ -12,18 +11,18 @@ namespace Korven.Units
         /* Warning!
          *  If Unity method OnTriggerEnter is not called, the code will not work!
          */
-        public Cell cellToMove;     // Cell where Unit will move
-        
+        public Cell cellToMove; // Cell where Unit will move
+
         private Cell _currentCell;
         private Cell _nextCell;
-        
+
         private float _progress;
-        
-        [SerializeField] 
+
+        [SerializeField]
         private float moveSpeed = 2f;
         private bool _isMoving = false;
         private bool _setNewPosition = false;
-        
+
         private Vector3 _currPosition;
         private Vector3 _nextPosition;
 

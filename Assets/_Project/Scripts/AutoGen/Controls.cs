@@ -15,10 +15,13 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
+namespace Korven.Controllers
+{
 
-    public partial class @Controls: IInputActionCollection2, IDisposable
+    public partial class @Controls : IInputActionCollection2, IDisposable
     {
         public InputActionAsset asset { get; }
+
         public @Controls()
         {
             asset = InputActionAsset.FromJson(@"{
@@ -120,16 +123,40 @@ using UnityEngine.InputSystem.Utilities;
         private readonly InputActionMap m_Game;
         private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
         private readonly InputAction m_Game_Restart;
+
         public struct GameActions
         {
             private @Controls m_Wrapper;
-            public GameActions(@Controls wrapper) { m_Wrapper = wrapper; }
+
+            public GameActions(@Controls wrapper)
+            {
+                m_Wrapper = wrapper;
+            }
+
             public InputAction @Restart => m_Wrapper.m_Game_Restart;
-            public InputActionMap Get() { return m_Wrapper.m_Game; }
-            public void Enable() { Get().Enable(); }
-            public void Disable() { Get().Disable(); }
+
+            public InputActionMap Get()
+            {
+                return m_Wrapper.m_Game;
+            }
+
+            public void Enable()
+            {
+                Get().Enable();
+            }
+
+            public void Disable()
+            {
+                Get().Disable();
+            }
+
             public bool enabled => Get().enabled;
-            public static implicit operator InputActionMap(GameActions set) { return set.Get(); }
+
+            public static implicit operator InputActionMap(GameActions set)
+            {
+                return set.Get();
+            }
+
             public void AddCallbacks(IGameActions instance)
             {
                 if (instance == null || m_Wrapper.m_GameActionsCallbackInterfaces.Contains(instance)) return;
@@ -160,10 +187,12 @@ using UnityEngine.InputSystem.Utilities;
                 AddCallbacks(instance);
             }
         }
+
         public GameActions @Game => new GameActions(this);
+
         public interface IGameActions
         {
             void OnRestart(InputAction.CallbackContext context);
         }
     }
-
+}

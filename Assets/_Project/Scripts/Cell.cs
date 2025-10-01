@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
+using Korven.Extra;
+using Korven.Units;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Korven.Units;
 
 namespace Korven.Level.Board
 {
@@ -11,6 +13,11 @@ namespace Korven.Level.Board
         private MeshRenderer focus;
         [SerializeField]
         private MeshRenderer select;
+        [NonSerialized]
+        public bool IsSelected;
+        public int X { get; set; }
+        public int Y { get; set; }
+        public Dictionary<NeighbourType, Cell> Neighbours { get; } = new();
 
         private Cell UnitsCell;
 
@@ -18,21 +25,11 @@ namespace Korven.Level.Board
 
         private void Awake()
         {
-            if (focus == null)
+            if (ValidateDependencies())
             {
-                Debug.LogError("[Cell] Serializable field _focus of type MeshRenderer is null]");
-                return;
+                focus.enabled = false;
+                select.enabled = false;
             }
-
-            focus.enabled = false;
-
-            if (select == null)
-            {
-                Debug.LogError("[Cell] Serializable field _select of type MeshRenderer is null");
-                return;
-            }
-
-            select.enabled = false;
 
             Unit.OnFindUnitsCellEvent += FindUnitsCurrentCell;
         }
@@ -40,25 +37,6 @@ namespace Korven.Level.Board
         private void OnDestroy()
         {
             Unit.OnFindUnitsCellEvent -= FindUnitsCurrentCell;
-        }
-
-        private void FindUnitsCurrentCell(Cell cell)
-        {
-            if (cell != null && cell == this)
-            {
-                UnitsCell = cell;
-            }
-        }
-
-        public void SetSelect(Material mat)
-        {
-            select.material = mat;
-            select.enabled = true;
-        }
-
-        public void ResetSelect()
-        {
-            select.enabled = false;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -74,6 +52,36 @@ namespace Korven.Level.Board
         public void OnPointerClick(PointerEventData eventData)
         {
             OnPointerClickEvent?.Invoke(this);
+        }
+
+        private void FindUnitsCurrentCell(Cell cell)
+        {
+            if (cell != null && cell == this)
+            {
+                UnitsCell = cell;
+            }
+        }
+
+        private bool ValidateDependencies()
+        {
+            if (focus == null)
+                throw new NullReferenceException("[Cell] Serializable field _focus of type MeshRenderer is null!");
+
+            if (select == null)
+                throw new NullReferenceException("[Cell] Serializable field _select of type MeshRenderer is null!");
+
+            return true;
+        }
+
+        public void SetSelect(Material mat)
+        {
+            select.material = mat;
+            select.enabled = true;
+        }
+
+        public void ResetSelect()
+        {
+            select.enabled = false;
         }
     }
 }

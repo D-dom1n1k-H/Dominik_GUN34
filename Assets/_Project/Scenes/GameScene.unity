@@ -304,7 +304,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3890ad30794dcb44285ddd8b21561663, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneController: {fileID: 678739032}
+  sceneController: {fileID: 678739032}
+  paletteSettings: {fileID: 11400000, guid: 7e32e6fd289b58f46bb7eab4be06abdb, type: 2}
 --- !u!4 &30673350 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3513552606867830924, guid: 01364655807ce964ebd8816a11b2be6d, type: 3}

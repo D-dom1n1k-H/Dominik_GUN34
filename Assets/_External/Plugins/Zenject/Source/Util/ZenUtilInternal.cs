@@ -4,8 +4,8 @@ using System.Linq;
 using ModestTree;
 using ModestTree.Util;
 #if !NOT_UNITY3D
-using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 #endif
 
 namespace Zenject.Internal
