@@ -1,13 +1,17 @@
 using Zenject;
-using Managers;
-using UnityEngine;
 
-namespace Installers
+namespace Korven.GamePlay.Installers
 {
     public class GameInstaller : MonoInstaller
     {
         public override void InstallBindings()
         {
+            ValidateDependencies();
+        }
+
+        private void ValidateDependencies()
+        {
+            
         }
     }
 }
