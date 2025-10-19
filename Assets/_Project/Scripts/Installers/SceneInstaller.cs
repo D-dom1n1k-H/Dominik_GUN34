@@ -2,7 +2,7 @@ using Zenject;
 
 namespace Korven.GamePlay.Installers
 {
-    public class GameInstaller : MonoInstaller
+    public class SceneInstaller : MonoInstaller
     {
         public override void InstallBindings()
         {
