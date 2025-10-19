@@ -1,9 +1,9 @@
 using System;
-using Korven.GamePlay.Controllers;
+using Necro.GamePlay.Controllers;
 using UnityEngine;
 using Zenject;
 
-namespace Korven.GamePlay.Installers
+namespace Necro.GamePlay.Installers
 {
     public class MainInstaller : MonoInstaller
     {
@@ -30,6 +30,7 @@ namespace Korven.GamePlay.Installers
          * UI - интерфейсы меню
          * Audio - звуки
          * Editor - кастомные окна редактора
+         * AutoGen - InputActionAssets
          * Tools(под модуль) - дополнительные фичи
          */
     }

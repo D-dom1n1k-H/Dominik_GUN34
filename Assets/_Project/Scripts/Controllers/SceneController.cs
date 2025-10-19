@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Korven.GamePlay.Controllers
+namespace Necro.GamePlay.Controllers
 {
     public class SceneController : MonoBehaviour
     {
