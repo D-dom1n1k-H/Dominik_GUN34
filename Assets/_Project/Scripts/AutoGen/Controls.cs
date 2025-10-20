@@ -169,7 +169,11 @@ namespace Necro.AutoGen.Controls
         {
             private @Controls m_Wrapper;
             public PlayerActions(@Controls wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Cancel => m_Wrapper.m_Player_Cancel;
+            public InputAction @Cancel
+            {
+                get => m_Wrapper.m_Player_Cancel;
+                set => throw new NotImplementedException();
+            }
             public InputAction @Confirm => m_Wrapper.m_Player_Confirm;
             public InputAction @Select => m_Wrapper.m_Player_Select;
             public InputActionMap Get() { return m_Wrapper.m_Player; }

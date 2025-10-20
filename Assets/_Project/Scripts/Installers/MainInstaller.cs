@@ -31,6 +31,7 @@ namespace Necro.GamePlay.Installers
          * Audio - звуки
          * Editor - кастомные окна редактора
          * AutoGen - InputActionAssets
+         * Extra - Enums итп..
          * Tools(под модуль) - дополнительные фичи
          */
     }

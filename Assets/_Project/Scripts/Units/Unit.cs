@@ -1,18 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
+using Necro.World.Board.Cell;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Zenject;
 
-public class Unit : MonoBehaviour
+namespace Necro.GamePlay.Units
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Unit : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
+        private Cell _currentCell = null;
         
-    }
+        private void Awake()
+        {
+            ValidateDependencies();
+        }
+        
+        public void OnPointerClick(PointerEventData eventData)
+        {
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+        }
+
+
+        [Inject]
+        private void Construct()
+        {
+        }
+
+        private void ValidateDependencies()
+        {
+        }
     }
 }
