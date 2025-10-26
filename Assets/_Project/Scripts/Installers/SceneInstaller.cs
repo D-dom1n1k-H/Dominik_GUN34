@@ -1,4 +1,9 @@
+using System;
 using Necro.AutoGen.Controls;
+using Necro.Config.CellPalleteSettings;
+using Necro.Extra.GameStatus;
+using Necro.GamePlay.Controllers;
+using UnityEngine;
 using Zenject;
 
 namespace Necro.GamePlay.Installers
@@ -6,17 +11,33 @@ namespace Necro.GamePlay.Installers
     public class SceneInstaller : MonoInstaller
     {
         private Controls _controls;
+        private GameStatus _gameStatus;
+        
+        [SerializeField]
+        private BattleController battleController;
+        
+        [SerializeField]
+        private CellPalletSettings cellPalletSettings;
         public override void InstallBindings()
         {
             ValidateDependencies();
             _controls = new Controls();
+            _gameStatus = new GameStatus();
+
+            Container.Bind<Controls>().FromInstance(_controls).AsSingle();
+            Container.Bind<GameStatus>().FromInstance(_gameStatus).WhenInjectedInto<BattleController>();
             
-            Container.Bind<Controls>().FromInstance(_controls);
+            Container.Bind<CellPalletSettings>().FromInstance(cellPalletSettings).AsSingle();
+            Container.Bind<BattleController>().FromInstance(battleController).AsSingle();
         }
 
         private void ValidateDependencies()
         {
+            if (cellPalletSettings == null)
+                throw new NullReferenceException("[SceneInstaller] cellPalletSettings is null!");
             
+            if (battleController == null)
+                throw new NullReferenceException("[SceneInstaller] battleController is null!");
         }
     }
 }
