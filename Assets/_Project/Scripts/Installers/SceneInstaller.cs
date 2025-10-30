@@ -34,10 +34,10 @@ namespace Necro.GamePlay.Installers
         private void ValidateDependencies()
         {
             if (cellPalletSettings == null)
-                throw new NullReferenceException("[SceneInstaller] cellPalletSettings is null!");
+                throw new NullReferenceException("<b>[SceneInstaller]</b> cellPalletSettings is null!");
             
             if (battleController == null)
-                throw new NullReferenceException("[SceneInstaller] battleController is null!");
+                throw new NullReferenceException("<b>[SceneInstaller]</b> battleController is null!");
         }
     }
 }

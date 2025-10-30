@@ -11,19 +11,18 @@ namespace Necro.GamePlay.Units
     public class Unit : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         private BattleController _battleController; //injected
-        
-        private Team _team;
+
+        public Team Team { get; private set; }
 
         [SerializeField, Space(10f)]
         private Material whiteCheckerMaterial;
         [SerializeField]
         private Material blackCheckerMaterial;
-        
-        private Cell[]  _cells;
-        private Cell _currentCell = null;
+
+        private Cell _currentCell;
 
         private MeshRenderer _meshRenderer;
-        
+
         // events for cells
         public event Action<Cell> OnUnitEnter;
         public event Action<Cell> OnUnitExit;
@@ -32,7 +31,7 @@ namespace Necro.GamePlay.Units
         private void Awake()
         {
             _meshRenderer = GetComponent<MeshRenderer>();
-            _cells = FindObjectsOfType<Cell>();
+
             ValidateDependencies();
         }
 
@@ -40,17 +39,16 @@ namespace Necro.GamePlay.Units
         {
             if (_meshRenderer.material.name.StartsWith(whiteCheckerMaterial.name))
             {
-                _team = Team.White;
+                Team = Team.White;
             }
             else if (_meshRenderer.material.name.StartsWith(blackCheckerMaterial.name))
             {
-                _team = Team.Black;
+                Team = Team.Black;
             }
             else
             {
-                Debug.LogError($"[Unit] unit has incorrect material: {_meshRenderer.material.name}");
+                Debug.LogError($"<b>[Unit]</b> unit has incorrect material: {_meshRenderer.material.name}");
             }
-            
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -68,23 +66,14 @@ namespace Necro.GamePlay.Units
             OnUnitExit?.Invoke(_currentCell);
         }
 
-        private void OnEnable()
+        public void Move(Vector3 goalPosition, float speed = 3f)
         {
-            for (int i = 0; i < _cells.Length; i++)
-            {
-                _cells[i].OnShareCellEvent += GetCurrentCell;
-            }
+            transform.position = Vector3.MoveTowards(transform.position, goalPosition, speed * Time.deltaTime);
         }
-
-        private void OnDisable()
+        public void GetCurrentCell(Cell cell) // метод является public для Cell
         {
-            for (int i = 0; i < _cells.Length; i++)
-            {
-                _cells[i].OnShareCellEvent -= GetCurrentCell;
-            }
+            _currentCell = cell;
         }
-
-        private void GetCurrentCell(Cell cell) { _currentCell = cell; }
 
         [Inject]
         private void Construct(BattleController battleController)
@@ -95,13 +84,13 @@ namespace Necro.GamePlay.Units
         private void ValidateDependencies()
         {
             if (whiteCheckerMaterial == null)
-                throw new NullReferenceException("[Unit] whiteCheckerMaterial is null!");
+                throw new NullReferenceException("<b>[Unit]</b> whiteCheckerMaterial is null!");
 
             if (blackCheckerMaterial == null)
-                throw new NullReferenceException("[Unit] blackCheckerMaterial is null!");
-            
-            if(_battleController == null)
-                throw new NullReferenceException("[Unit] BattleController is could not be injected!");
+                throw new NullReferenceException("<b>[Unit]</b> blackCheckerMaterial is null!");
+
+            if (_battleController == null)
+                throw new NullReferenceException("<b>[Unit]</b> BattleController is could not be injected!");
         }
     }
 }

@@ -17,15 +17,16 @@ namespace Necro.World.Board.Cell
         private MeshRenderer focus;
         [SerializeField]
         private MeshRenderer select;
-
+        public MeshRenderer Select {get => select; private set => select = value; }
+        
+        
         public bool SelectIsActive { get; private set; } = false;
 
-        private Unit _currentUnit;
-
-        private readonly Dictionary<NeighbourType, Cell> _neighbours = new Dictionary<NeighbourType, Cell>(8);
-
+        public Unit CurrentUnit {get; private set;}
+        
+        public readonly Dictionary<NeighbourType, Cell> Neighbours = new Dictionary<NeighbourType, Cell>(8);
+        
         public event Action<Cell> OnPointerClickEvent;
-        public event Action<Cell> OnShareCellEvent; //передаёт себя в текущий юнит
 
         private void Awake()
         {
@@ -35,7 +36,7 @@ namespace Necro.World.Board.Cell
         private void Start()
         {
             FindAndFillNearestCells();
-
+            
             focus.enabled = false;
             select.enabled = false;
         }
@@ -55,62 +56,58 @@ namespace Necro.World.Board.Cell
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.TryGetComponent<Unit>(out var unit))
+            var unit = other.GetComponentInParent<Unit>();
+            if (unit == null)
                 return;
 
-            if (_currentUnit != null && _currentUnit != unit)
+            if (CurrentUnit != null && CurrentUnit != unit)
             {
-                UnsubscribeFromUnit(_currentUnit);
-                _currentUnit = null;
+                UnsubscribeFromUnit(CurrentUnit);
+                CurrentUnit = null;
             }
 
-            if (_currentUnit == null)
+            if (CurrentUnit == null)
             {
-                _currentUnit = unit;
-                SubscribeToUnit(_currentUnit);
-                OnShareCellEvent?.Invoke(this);
-                Debug.Log("[Cell] OnShareCellEvent was called");
+                CurrentUnit = unit;
+                SubscribeToUnit(CurrentUnit);
+                
+                CurrentUnit.GetCurrentCell(this);
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (!other.TryGetComponent<Unit>(out var unit))
+            var unit = other.GetComponentInParent<Unit>();
+            if (unit == null)
                 return;
 
-            if (_currentUnit != null && _currentUnit == unit)
+            if (CurrentUnit != null && CurrentUnit == unit)
             {
-                UnsubscribeFromUnit(_currentUnit);
-                _currentUnit = null;
+                UnsubscribeFromUnit(CurrentUnit);
+                CurrentUnit.GetCurrentCell(null); 
+                CurrentUnit = null;
             }
         }
 
         private void OnDrawGizmosSelected()
         {
-            if (_neighbours == null) return;
+            if (Neighbours == null) return;
             Gizmos.color = Color.magenta;
-            foreach (var kv in _neighbours)
+            foreach (var kv in Neighbours)
             {
                 if (kv.Value == null) continue;
                 Gizmos.DrawLine(transform.position, kv.Value.transform.position);
                 Gizmos.DrawSphere(kv.Value.transform.position, 0.1f);
             }
         }
-
-        private void OnDisable()
-        {
-            if (_currentUnit != null)
-            {
-                UnsubscribeFromUnit(_currentUnit);
-                _currentUnit = null;
-            }
-        }
-
+        
+        
         public void SetSelect(Material material)
         {
             select.enabled = true;
             select.material = material;
 
+            _battleController.SetGameStatusModeToSelect(gameObject);
             SelectIsActive = true;
         }
 
@@ -122,7 +119,7 @@ namespace Necro.World.Board.Cell
 
         private void FindAndFillNearestCells()
         {
-            _neighbours.Clear();
+            Neighbours.Clear();
 
             Cell[] cells = FindObjectsOfType<Cell>();
             List<(Cell cell, float distanceSqr)> list = new List<(Cell, float)>();
@@ -142,11 +139,11 @@ namespace Necro.World.Board.Cell
                 Vector3 offset = list[i].cell.transform.position - transform.position;
                 NeighbourType type = GetNeighbourType(offset, 0.5f);
 
-                if (!_neighbours.ContainsKey(type))
+                if (!Neighbours.ContainsKey(type))
                 {
-                    _neighbours[type] = list[i].cell;
+                    Neighbours[type] = list[i].cell;
 
-                    if (_neighbours.Count == 8) break;
+                    if (Neighbours.Count == 8) break;
                 }
             }
         }
@@ -174,7 +171,6 @@ namespace Necro.World.Board.Cell
         private void OnCellClicked(Cell cell)
         {
             OnPointerClickEvent?.Invoke(cell);
-            _battleController.SetGameStatusModeToSelect(gameObject);
         }
 
         private void OnCellEntered(Cell cell)
@@ -214,13 +210,13 @@ namespace Necro.World.Board.Cell
         private void ValidateDependencies()
         {
             if (focus == null)
-                throw new NullReferenceException("[Cell] focus is null!");
+                throw new NullReferenceException("<b>[Cell]</b> focus is null!");
 
             if (select == null)
-                throw new NullReferenceException("[Cell] select is null!");
+                throw new NullReferenceException("<b>[Cell]</b> select is null!");
 
             if (_battleController == null)
-                throw new NullReferenceException("[Cell] BattleController is could not be injected!");
+                throw new NullReferenceException("<b>[Cell]</b> BattleController is could not be injected!");
         }
     }
 }

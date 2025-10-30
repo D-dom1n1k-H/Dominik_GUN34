@@ -12,6 +12,8 @@ namespace Necro.GamePlay.Controllers
     {
         private Controls _controls; //injected
         private GameStatus _gameStatus; //injected
+        
+        private GameStatus[] _lastGameStatus =  new GameStatus[1];
 
         public event Action<GameObject> OnGameStatusModeChangedEvent;
         public event Action OnMovePreformedEvent;
@@ -45,47 +47,61 @@ namespace Necro.GamePlay.Controllers
         private void OnPlayerConfirm_performed(InputAction.CallbackContext obj)
         {
             OnMovePreformedEvent?.Invoke();
-            Debug.Log("[BattleController] OnMovePreformedEvent was invoked");
+            Debug.Log("<b>[BattleController]</b> OnMovePreformedEvent was invoked");
         }
 
         private void OnPlayerCancel_performed(InputAction.CallbackContext obj)
         {
+            SetGameStatusModeToLastOne(gameObject);
         }
 
         public void SetGameStatusModeToLock(GameObject sender)
         {
             _gameStatus = GameStatus.Lock;
             OnGameStatusModeChangedEvent?.Invoke(sender);
-            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from " + sender.name + " to 'Lock'");
+            _lastGameStatus[0] = _gameStatus;
+            
+            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name + 
+                      " to 'Lock'");
         }
 
         public void SetGameStatusModeToSelect(GameObject sender)
         {
             _gameStatus = GameStatus.Select;
             OnGameStatusModeChangedEvent?.Invoke(sender);
-            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from " + sender.name + " to 'Select'");
+            _lastGameStatus[0] = _gameStatus;
+            
+            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name + 
+                      " to 'Select'");
         }
 
         public void SetGameStatusModeToMove(GameObject sender)
         {
             _gameStatus = GameStatus.Move;
             OnGameStatusModeChangedEvent?.Invoke(sender);
-
-            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from " + sender.name + " to 'Move'");
+            _lastGameStatus[0] = _gameStatus;
+            
+            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name + 
+                      " to 'Move'");
         }
 
         public void SetGameStatusModeToAttack(GameObject sender)
         {
             _gameStatus = GameStatus.Attack;
             OnGameStatusModeChangedEvent?.Invoke(sender);
-            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from " + sender.name + " to 'Attack'");
+            _lastGameStatus[0] = _gameStatus;
+            
+            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name + 
+                      " to 'Attack'");
         }
 
         public void SetGameStatusModeToConfirmMove(GameObject sender)
         {
             _gameStatus = GameStatus.ConfirmMove;
             OnGameStatusModeChangedEvent?.Invoke(sender);
-            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from " + sender.name +
+            _lastGameStatus[0] = _gameStatus;
+            
+            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name +
                       " to 'ConfirmMove'");
         }
 
@@ -93,8 +109,19 @@ namespace Necro.GamePlay.Controllers
         {
             _gameStatus = GameStatus.ConfirmAttack;
             OnGameStatusModeChangedEvent?.Invoke(sender);
-            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from " + sender.name +
+            _lastGameStatus[0] = _gameStatus;
+            
+            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name +
                       " to 'ConfirmAttack'");
+        }
+
+        private void SetGameStatusModeToLastOne(GameObject sender)
+        {
+            _gameStatus = _lastGameStatus[0];
+            OnGameStatusModeChangedEvent?.Invoke(sender);
+            
+            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name +
+                      " to LastOne: " + _lastGameStatus[0]);
         }
 
         [Inject]
