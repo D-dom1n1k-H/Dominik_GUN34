@@ -4,7 +4,6 @@ using Necro.Extra.Enums.NeighbourType;
 using Necro.Extra.Enums.Team;
 using Necro.GamePlay.Controllers;
 using Necro.World.Board.Cell;
-using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
@@ -17,10 +16,24 @@ namespace Necro.World.Battlefield
 
         private Cell[] _cells;
 
+        // for movement
+        private Cell _whiteFrCell;
+        private Cell _whiteBrCell;
+
+        private Cell _blackFlCell;
+        private Cell _blackBlCell;
+
+        private Cell _targetCell;
+        public event Action<Cell, Cell> OnMoveRequestEvent; // fromCell, toCell
+
         private void Awake()
         {
             _cells = FindObjectsOfType<Cell>();
             ValidateDependencies();
+        }
+
+        private void Update()
+        {
         }
 
         private void OnEnable()
@@ -45,7 +58,7 @@ namespace Necro.World.Battlefield
 
             if (cellsMeshRender == null)
             {
-                Debug.LogError($"<b>[BattleController]</b> Cell {cell.gameObject.name} has no MeshRenderer");
+                Debug.LogError($"<b>[Battlefield]</b> Cell {cell.gameObject.name} has no MeshRenderer");
             }
             else if (!cell.SelectIsActive && cell.CurrentUnit != null)
             {
@@ -59,7 +72,61 @@ namespace Necro.World.Battlefield
                 TryToHidePossibleMoves(cell);
             }
 
-            Debug.Log("<b>[BattleController]</b> OnCellClicked method was called");
+            else if (cell.SelectIsActive &&
+                     cell.Select.material.color ==
+                     _cellPalletSettings.MoveCellMaterial.color) // for movement
+            {
+                Debug.Log("<b>[Battlefield]</b> cell.Select.material == _cellPalletSettings.MoveCellMaterial");
+
+                switch (cell)
+                {
+                    case var c when c == _whiteFrCell:
+
+                        if (cell == null) Debug.LogWarning("<b>[Battlefield]</b> cell is null!");
+                        if (_whiteFrCell == null) Debug.LogWarning("<b>[Battlefield]</b> _whiteFrCell is null!");
+                        else
+                        {
+                            OnMoveRequestEvent.Invoke(cell, _whiteFrCell);
+                        }
+
+                        break;
+
+                    case var c when c == _whiteBrCell:
+
+                        if (cell == null) Debug.LogWarning("<b>[Battlefield]</b> cell is null!");
+                        if (_whiteBrCell == null) Debug.LogWarning("<b>[Battlefield]</b> _whiteBrCell is null!");
+                        else
+                        {
+                            OnMoveRequestEvent.Invoke(cell, _whiteBrCell);
+                        }
+
+                        break;
+
+                    case var c when c == _blackFlCell:
+
+                        if (cell == null) Debug.LogWarning("<b>[Battlefield]</b> cell is null!");
+                        if (_blackFlCell == null) Debug.LogWarning("<b>[Battlefield]</b> _blackFlCell is null!");
+                        else
+                        {
+                            OnMoveRequestEvent.Invoke(cell, _blackFlCell);
+                        }
+
+                        break;
+
+                    case var c when c == _blackBlCell:
+
+                        if (cell == null) Debug.LogWarning("<b>[Battlefield]</b> cell is null!");
+                        if (_blackBlCell == null) Debug.LogWarning("<b>[Battlefield]</b> _blackBlCell is null!");
+                        else
+                        {
+                            OnMoveRequestEvent.Invoke(cell, _blackBlCell);
+                        }
+
+                        break;
+                }
+            }
+
+            Debug.Log("<b>[Battlefield]</b> OnCellClicked method was called");
         }
 
         private void TryToMarkPossibleMoves(Cell cell)
@@ -67,13 +134,14 @@ namespace Necro.World.Battlefield
             if (cell.CurrentUnit == null) return;
 
             var cellsTeam = cell.CurrentUnit.Team;
-            
-            foreach (var c in _cells) 
+
+            foreach (var c in _cells)
             {
                 c.ResetSelect();
             }
-            
+
             cell.SetSelect(_cellPalletSettings.SelectCellMaterial);
+            
             switch (cellsTeam)
             {
                 case Team.White:
@@ -82,8 +150,9 @@ namespace Necro.World.Battlefield
                         if (fr.CurrentUnit == null)
                         {
                             fr.SetSelect(_cellPalletSettings.MoveCellMaterial);
+                            _whiteFrCell = fr;
                         }
-                        else if(fr.CurrentUnit != null && fr.CurrentUnit.Team == Team.Black)
+                        else if (fr.CurrentUnit != null && fr.CurrentUnit.Team == Team.Black)
                         {
                             fr.SetSelect(_cellPalletSettings.AttackCellMaterial);
                         }
@@ -94,8 +163,9 @@ namespace Necro.World.Battlefield
                         if (br.CurrentUnit == null)
                         {
                             br.SetSelect(_cellPalletSettings.MoveCellMaterial);
+                            _whiteBrCell = br;
                         }
-                        else if(br.CurrentUnit != null && br.CurrentUnit.Team == Team.Black)
+                        else if (br.CurrentUnit != null && br.CurrentUnit.Team == Team.Black)
                         {
                             br.SetSelect(_cellPalletSettings.AttackCellMaterial);
                         }
@@ -109,8 +179,9 @@ namespace Necro.World.Battlefield
                         if (bl.CurrentUnit == null)
                         {
                             bl.SetSelect(_cellPalletSettings.MoveCellMaterial);
+                            _blackBlCell = bl;
                         }
-                        else if(bl.CurrentUnit != null && bl.CurrentUnit.Team == Team.White)
+                        else if (bl.CurrentUnit != null && bl.CurrentUnit.Team == Team.White)
                         {
                             bl.SetSelect(_cellPalletSettings.AttackCellMaterial);
                         }
@@ -121,8 +192,9 @@ namespace Necro.World.Battlefield
                         if (fl.CurrentUnit == null)
                         {
                             fl.SetSelect(_cellPalletSettings.MoveCellMaterial);
+                            _blackFlCell = fl;
                         }
-                        else if(fl.CurrentUnit != null && fl.CurrentUnit.Team == Team.White)
+                        else if (fl.CurrentUnit != null && fl.CurrentUnit.Team == Team.White)
                         {
                             fl.SetSelect(_cellPalletSettings.AttackCellMaterial);
                         }
@@ -131,7 +203,7 @@ namespace Necro.World.Battlefield
                     break;
             }
 
-            Debug.Log("<b>[BattleController]</b> TryToMarkPossibleMoves method was called");
+            Debug.Log("<b>[Battlefield]</b> TryToMarkPossibleMoves method was called");
         }
 
         private void TryToHidePossibleMoves(Cell cell)
@@ -160,7 +232,6 @@ namespace Necro.World.Battlefield
             }
         }
 
-
         [Inject]
         private void Construct(CellPalletSettings cellPalletSettings, BattleController battleController)
         {
@@ -171,11 +242,10 @@ namespace Necro.World.Battlefield
         private void ValidateDependencies()
         {
             if (_battleController == null)
-                throw new NullReferenceException("<b>[BattleController]</b> BattleController could not be injected!");
+                throw new NullReferenceException("<b>[Battlefield]</b> BattleController could not be injected!");
 
             if (_cellPalletSettings == null)
-                throw new NullReferenceException(
-                    "<b>[BattleController]</b> _cellPalletSettings could not be injected!");
+                throw new NullReferenceException("<b>[Battlefield]</b> _cellPalletSettings could not be injected!");
         }
     }
 }

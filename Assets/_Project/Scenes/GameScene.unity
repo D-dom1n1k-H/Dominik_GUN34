@@ -308,8 +308,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3890ad30794dcb44285ddd8b21561663, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleController: {fileID: 1788071146}
   cellPalletSettings: {fileID: 11400000, guid: bc2e71c4e1e4b004e81206a11b032cac, type: 2}
+  battleController: {fileID: 1788071146}
+  battlefield: {fileID: 75603227}
 --- !u!23 &30495512 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 5639233210001906819, guid: eccc7ed76d409134f93e6ffdb67d5b1b, type: 3}
@@ -5647,6 +5648,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2166713000014750801, guid: 866a70cc5a430764db47f97aacdac307, type: 3}
   m_PrefabInstance: {fileID: 1049020451}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1058396715 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -2052686654029931039, guid: 866a70cc5a430764db47f97aacdac307, type: 3}
+  m_PrefabInstance: {fileID: 287157498}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a6350cb6d419fa4e80cfe727207d2af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1067013799 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1113940965793981807, guid: eccc7ed76d409134f93e6ffdb67d5b1b, type: 3}
@@ -7971,6 +7983,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2166713000014750801, guid: 866a70cc5a430764db47f97aacdac307, type: 3}
   m_PrefabInstance: {fileID: 1590660449}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1608705439
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1608705441}
+  - component: {fileID: 1608705440}
+  m_Layer: 0
+  m_Name: TestCheckerMover
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1608705440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608705439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6433c3edba3df5c4b9cbbd061e542943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentCell: {fileID: 1650387708}
+  targetCell: {fileID: 1058396715}
+--- !u!4 &1608705441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608705439}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1615680179
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8473,6 +8531,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2166713000014750801, guid: 866a70cc5a430764db47f97aacdac307, type: 3}
   m_PrefabInstance: {fileID: 1650387706}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1650387708 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -2052686654029931039, guid: 866a70cc5a430764db47f97aacdac307, type: 3}
+  m_PrefabInstance: {fileID: 1650387706}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a6350cb6d419fa4e80cfe727207d2af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1687919016
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11486,3 +11555,4 @@ SceneRoots:
   - {fileID: 1814173484}
   - {fileID: 1010617059}
   - {fileID: 1416095285}
+  - {fileID: 1608705441}

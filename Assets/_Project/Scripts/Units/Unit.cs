@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Necro.Extra.Enums.Team;
 using Necro.GamePlay.Controllers;
 using Necro.World.Board.Cell;
@@ -27,6 +28,8 @@ namespace Necro.GamePlay.Units
         public event Action<Cell> OnUnitEnter;
         public event Action<Cell> OnUnitExit;
         public event Action<Cell> OnUnitClicked;
+
+        public event Action<Cell> OnMoveCompleted;
 
         private void Awake()
         {
@@ -66,11 +69,31 @@ namespace Necro.GamePlay.Units
             OnUnitExit?.Invoke(_currentCell);
         }
 
-        public void Move(Vector3 goalPosition, float speed = 3f)
+
+        public void Move(Cell targetCell, float speed = 0.05f)
         {
-            transform.position = Vector3.MoveTowards(transform.position, goalPosition, speed * Time.deltaTime);
+            StartCoroutine(MoveCoroutine(targetCell, speed));
         }
-        public void GetCurrentCell(Cell cell) // метод является public для Cell
+
+        private IEnumerator MoveCoroutine(Cell targetCell, float speed)
+        {
+            Vector3 targetPosition = targetCell.transform.position + new Vector3(0f, 1.215f, 0f);
+
+            while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
+            {
+                transform.position = Vector3.MoveTowards(
+                    transform.position,
+                    targetPosition,
+                    speed * Time.deltaTime
+                );
+
+                yield return null;
+            }
+
+            transform.position = targetPosition;
+        }
+
+        public void GetCurrentCell(Cell cell) // used in Cell.cs
         {
             _currentCell = cell;
         }

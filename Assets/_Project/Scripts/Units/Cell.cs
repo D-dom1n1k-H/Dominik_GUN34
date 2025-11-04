@@ -56,7 +56,7 @@ namespace Necro.World.Board.Cell
 
         private void OnTriggerEnter(Collider other)
         {
-            var unit = other.GetComponentInParent<Unit>();
+            var unit = other.GetComponent<Unit>();
             if (unit == null)
                 return;
 
@@ -72,20 +72,6 @@ namespace Necro.World.Board.Cell
                 SubscribeToUnit(CurrentUnit);
                 
                 CurrentUnit.GetCurrentCell(this);
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            var unit = other.GetComponentInParent<Unit>();
-            if (unit == null)
-                return;
-
-            if (CurrentUnit != null && CurrentUnit == unit)
-            {
-                UnsubscribeFromUnit(CurrentUnit);
-                CurrentUnit.GetCurrentCell(null); 
-                CurrentUnit = null;
             }
         }
 
