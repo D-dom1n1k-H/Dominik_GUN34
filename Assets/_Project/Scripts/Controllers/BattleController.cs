@@ -1,7 +1,7 @@
 using System;
 using Necro.AutoGen.Controls;
 using Necro.Extra.GameStatus;
-using Necro.World.Board.Cell;
+using Necro.World.Battlefield;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
@@ -11,9 +11,10 @@ namespace Necro.GamePlay.Controllers
     public class BattleController : MonoBehaviour
     {
         private Controls _controls; //injected
+        private Battlefield _battlefield; //injected
         private GameStatus _gameStatus; //injected
-        
-        private GameStatus[] _lastGameStatus =  new GameStatus[1];
+
+        private GameStatus[] _lastGameStatus = new GameStatus[1];
 
         public event Action<GameObject> OnGameStatusModeChangedEvent;
         public event Action OnMovePreformedEvent;
@@ -55,86 +56,128 @@ namespace Necro.GamePlay.Controllers
             SetGameStatusModeToLastOne(gameObject);
         }
 
+        #region Public API
+
+        public void UnblockPlayerInput()
+        {
+            _controls.Enable();
+            _battlefield.IsUnitMoving(false);
+        }
+
+        public void BlockPlayerInput()
+        {
+            _controls.Disable();
+            _battlefield.IsUnitMoving(true);
+        }
+
         public void SetGameStatusModeToLock(GameObject sender)
         {
-            _gameStatus = GameStatus.Lock;
-            OnGameStatusModeChangedEvent?.Invoke(sender);
-            _lastGameStatus[0] = _gameStatus;
-            
-            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name + 
-                      " to 'Lock'");
+            if (_lastGameStatus[0] != GameStatus.Lock)
+            {
+                _gameStatus = GameStatus.Lock;
+                OnGameStatusModeChangedEvent?.Invoke(sender);
+                _lastGameStatus[0] = _gameStatus;
+
+                Debug.Log("<color=yellow><b>[BattleController]</b> GameStatus mode was changed from GameObject "
+                          + sender.name + " to 'Lock'</color>");
+            }
         }
 
         public void SetGameStatusModeToSelect(GameObject sender)
         {
-            _gameStatus = GameStatus.Select;
-            OnGameStatusModeChangedEvent?.Invoke(sender);
-            _lastGameStatus[0] = _gameStatus;
-            
-            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name + 
-                      " to 'Select'");
+            if (_lastGameStatus[0] != GameStatus.Select)
+            {
+                _gameStatus = GameStatus.Select;
+                OnGameStatusModeChangedEvent?.Invoke(sender);
+                _lastGameStatus[0] = _gameStatus;
+
+                Debug.Log("<color=yellow><b>[BattleController]</b> GameStatus mode was changed from GameObject "
+                          + sender.name + " to 'Select'</color>");
+            }
         }
 
         public void SetGameStatusModeToMove(GameObject sender)
         {
-            _gameStatus = GameStatus.Move;
-            OnGameStatusModeChangedEvent?.Invoke(sender);
-            _lastGameStatus[0] = _gameStatus;
-            
-            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name + 
-                      " to 'Move'");
+            if (_lastGameStatus[0] != GameStatus.Move)
+            {
+                _gameStatus = GameStatus.Move;
+                OnGameStatusModeChangedEvent?.Invoke(sender);
+                _lastGameStatus[0] = _gameStatus;
+
+                Debug.Log("<color=yellow><b>[BattleController]</b> GameStatus mode was changed from GameObject "
+                          + sender.name + " to 'Move'</color>");
+            }
         }
 
         public void SetGameStatusModeToAttack(GameObject sender)
         {
-            _gameStatus = GameStatus.Attack;
-            OnGameStatusModeChangedEvent?.Invoke(sender);
-            _lastGameStatus[0] = _gameStatus;
-            
-            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name + 
-                      " to 'Attack'");
+            if (_lastGameStatus[0] != GameStatus.Attack)
+            {
+                _gameStatus = GameStatus.Attack;
+                OnGameStatusModeChangedEvent?.Invoke(sender);
+                _lastGameStatus[0] = _gameStatus;
+
+                Debug.Log("<color=yellow><b>[BattleController]</b> GameStatus mode was changed from GameObject "
+                          + sender.name + " to 'Attack'</color>");
+            }
         }
 
         public void SetGameStatusModeToConfirmMove(GameObject sender)
         {
-            _gameStatus = GameStatus.ConfirmMove;
-            OnGameStatusModeChangedEvent?.Invoke(sender);
-            _lastGameStatus[0] = _gameStatus;
-            
-            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name +
-                      " to 'ConfirmMove'");
+            if (_lastGameStatus[0] != GameStatus.ConfirmMove)
+            {
+                _gameStatus = GameStatus.ConfirmMove;
+                OnGameStatusModeChangedEvent?.Invoke(sender);
+                _lastGameStatus[0] = _gameStatus;
+
+                Debug.Log("<color=yellow><b>[BattleController]</b> GameStatus mode was changed from GameObject "
+                          + sender.name + " to 'ConfirmMove'</color>");
+            }
         }
 
         public void SetGameStatusModeToConfirmAttack(GameObject sender)
         {
-            _gameStatus = GameStatus.ConfirmAttack;
-            OnGameStatusModeChangedEvent?.Invoke(sender);
-            _lastGameStatus[0] = _gameStatus;
-            
-            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name +
-                      " to 'ConfirmAttack'");
+            if (_lastGameStatus[0] != GameStatus.ConfirmMove)
+            {
+                _gameStatus = GameStatus.ConfirmAttack;
+                OnGameStatusModeChangedEvent?.Invoke(sender);
+                _lastGameStatus[0] = _gameStatus;
+
+                Debug.Log("<color=yellow><b>[BattleController]</b> GameStatus mode was changed from GameObject "
+                          + sender.name + " to 'ConfirmAttack'</color>");
+            }
         }
 
         private void SetGameStatusModeToLastOne(GameObject sender)
         {
             _gameStatus = _lastGameStatus[0];
             OnGameStatusModeChangedEvent?.Invoke(sender);
-            
-            Debug.Log("<b>[BattleController]</b> GameStatus mode was changed from GameObject " + sender.name +
-                      " to LastOne: " + _lastGameStatus[0]);
+
+            Debug.Log("<color=yellow><b>[BattleController]</b> GameStatus mode was changed from GameObject "
+                      + sender.name + " to LastOne: " + _lastGameStatus[0] + "</color>");
         }
 
+        #endregion
+
         [Inject]
-        private void Construct(Controls controls, GameStatus gameStatus)
+        private void Construct(Controls controls, GameStatus gameStatus, Battlefield battlefield)
         {
             _controls = controls;
             _gameStatus = gameStatus;
+            _battlefield = battlefield;
         }
 
         private void ValidateDependencies()
         {
             if (_controls == null)
                 throw new NullReferenceException("[BattleController] _controls could not be injected!");
+
+            if (_battlefield == null)
+                throw new NullReferenceException("[BattleController] _battlefield could not be injected!");
         }
+
+        /*
+         * Class BattleController should be used to handle the players input, and it gives API to change enum GameStatus
+         */
     }
 }

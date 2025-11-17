@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Necro.Config.CellPalleteSettings;
 using Necro.Extra.Enums.NeighbourType;
 using Necro.GamePlay.Controllers;
 using Necro.GamePlay.Units;
@@ -11,48 +12,44 @@ namespace Necro.World.Board.Cell
 {
     public class Cell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
-        private BattleController _battleController; //injected
+        private BattleController _battleController; // injected
+        private CellPalletSettings _cellPalletSettings; // injected
 
         [SerializeField, Space(10f)]
         private MeshRenderer focus;
         [SerializeField]
         private MeshRenderer select;
-        public MeshRenderer Select {get => select; private set => select = value; }
-        
-        
-        public bool SelectIsActive { get; private set; } = false;
+        [SerializeField]
+        private Material whiteCellMaterial;
+        [SerializeField]
+        private Material blackCellMaterial;
 
-        public Unit CurrentUnit {get; private set;}
-        
+        public MeshRenderer Select => select;
+        private MeshRenderer _meshRenderer;
+
+        public bool SelectIsActive { get; private set; } = false;
+        public Unit CurrentUnit { get; private set; }
+
         public readonly Dictionary<NeighbourType, Cell> Neighbours = new Dictionary<NeighbourType, Cell>(8);
-        
+
         public event Action<Cell> OnPointerClickEvent;
 
         private void Awake()
         {
+            _meshRenderer = gameObject.GetComponent<MeshRenderer>();
             ValidateDependencies();
         }
 
         private void Start()
         {
             FindAndFillNearestCells();
-            
             focus.enabled = false;
             select.enabled = false;
         }
 
-        public void OnPointerClick(PointerEventData eventData)
-            => OnCellClicked(this);
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            OnCellEntered(this);
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            OnCellExited(this);
-        }
+        public void OnPointerEnter(PointerEventData eventData) => OnCellEntered(this);
+        public void OnPointerExit(PointerEventData eventData) => OnCellExited(this);
+        public void OnPointerClick(PointerEventData eventData) => OnCellClicked(this);
 
         private void OnTriggerEnter(Collider other)
         {
@@ -65,13 +62,24 @@ namespace Necro.World.Board.Cell
                 UnsubscribeFromUnit(CurrentUnit);
                 CurrentUnit = null;
             }
-
-            if (CurrentUnit == null)
+            else if (_meshRenderer.material.color == blackCellMaterial.color)
             {
                 CurrentUnit = unit;
                 SubscribeToUnit(CurrentUnit);
-                
-                CurrentUnit.GetCurrentCell(this);
+                CurrentUnit.SetCurrentCell(this);
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            var unit = other.GetComponent<Unit>();
+            if (unit == null)
+                return;
+
+            if (CurrentUnit == unit)
+            {
+                UnsubscribeFromUnit(CurrentUnit);
+                CurrentUnit = null;
             }
         }
 
@@ -86,13 +94,16 @@ namespace Necro.World.Board.Cell
                 Gizmos.DrawSphere(kv.Value.transform.position, 0.1f);
             }
         }
-        
-        
+
+        #region Public API
+
+        public Unit GetCurrentUnit() => CurrentUnit;
+        public void SetCurrentUnit(Unit unit) => CurrentUnit = unit;
+
         public void SetSelect(Material material)
         {
             select.enabled = true;
             select.material = material;
-
             _battleController.SetGameStatusModeToSelect(gameObject);
             SelectIsActive = true;
         }
@@ -103,10 +114,13 @@ namespace Necro.World.Board.Cell
             SelectIsActive = false;
         }
 
+        #endregion
+
+        #region Private Logic
+
         private void FindAndFillNearestCells()
         {
             Neighbours.Clear();
-
             Cell[] cells = FindObjectsOfType<Cell>();
             List<(Cell cell, float distanceSqr)> list = new List<(Cell, float)>();
 
@@ -128,7 +142,6 @@ namespace Necro.World.Board.Cell
                 if (!Neighbours.ContainsKey(type))
                 {
                     Neighbours[type] = list[i].cell;
-
                     if (Neighbours.Count == 8) break;
                 }
             }
@@ -154,25 +167,9 @@ namespace Necro.World.Board.Cell
             return NeighbourType.BackLeft;
         }
 
-        private void OnCellClicked(Cell cell)
-        {
-            OnPointerClickEvent?.Invoke(cell);
-        }
-
-        private void OnCellEntered(Cell cell)
-        {
-            cell.focus.enabled = true;
-        }
-
-        private void OnCellExited(Cell cell)
-        {
-            cell.focus.enabled = false;
-        }
-
         private void SubscribeToUnit(Unit unit)
         {
             if (unit == null) return;
-
             unit.OnUnitEnter += OnCellEntered;
             unit.OnUnitExit += OnCellExited;
             unit.OnUnitClicked += OnCellClicked;
@@ -181,28 +178,38 @@ namespace Necro.World.Board.Cell
         private void UnsubscribeFromUnit(Unit unit)
         {
             if (unit == null) return;
-
             unit.OnUnitEnter -= OnCellEntered;
             unit.OnUnitExit -= OnCellExited;
             unit.OnUnitClicked -= OnCellClicked;
         }
+        
+        private void OnCellClicked(Cell cell) => OnPointerClickEvent?.Invoke(cell);
+        private void OnCellEntered(Cell cell) => cell.focus.enabled = true;
+        private void OnCellExited(Cell cell) => cell.focus.enabled = false;
+
+        #endregion
 
         [Inject]
-        private void Construct(BattleController battleController)
+        private void Construct(BattleController battleController, CellPalletSettings cellPalletSettings)
         {
             _battleController = battleController;
+            _cellPalletSettings = cellPalletSettings;
         }
 
         private void ValidateDependencies()
         {
             if (focus == null)
                 throw new NullReferenceException("<b>[Cell]</b> focus is null!");
-
             if (select == null)
                 throw new NullReferenceException("<b>[Cell]</b> select is null!");
-
             if (_battleController == null)
-                throw new NullReferenceException("<b>[Cell]</b> BattleController is could not be injected!");
+                throw new NullReferenceException("<b>[Cell]</b> _battleController is could not be injected!");
+            if (_cellPalletSettings == null)
+                throw new NullReferenceException("<b>[Cell]</b> _cellPalletSettings is could not be injected!");
         }
+
+        /*
+         * Class Cell is used to control cells on Battlefield
+         */
     }
 }

@@ -1,6 +1,6 @@
 namespace Necro.Extra.Enums.NeighbourType
 {
-    public enum NeighbourType
+    public enum NeighbourType : byte
     {
      Forward,
      Right,

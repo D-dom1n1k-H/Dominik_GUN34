@@ -13,7 +13,10 @@ public class TestCheckerMover : MonoBehaviour
     {
         if (currentCell.CurrentUnit != null)
         {
-            currentCell.CurrentUnit.Move(targetCell);
+            // currentCell.CurrentUnit.Move(targetCell);
         }
     }
+    /*
+     * TestClass for try PlayerController
+     */
 }

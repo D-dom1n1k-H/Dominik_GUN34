@@ -1,6 +1,6 @@
 namespace Necro.Extra.GameStatus
 {
-    public enum GameStatus
+    public enum GameStatus : byte
     {
         Lock,
         Select,
