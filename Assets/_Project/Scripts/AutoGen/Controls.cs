@@ -46,15 +46,6 @@ namespace Necro.AutoGen.Controls
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Select"",
-                    ""type"": ""Button"",
-                    ""id"": ""e283f841-ad51-4ab5-8e2d-547613efaa10"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -66,17 +57,6 @@ namespace Necro.AutoGen.Controls
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Confirm"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""00d6ce87-7cbc-47d5-9d60-027308b8ab77"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -100,7 +80,6 @@ namespace Necro.AutoGen.Controls
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Cancel = m_Player.FindAction("Cancel", throwIfNotFound: true);
             m_Player_Confirm = m_Player.FindAction("Confirm", throwIfNotFound: true);
-            m_Player_Select = m_Player.FindAction("Select", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -164,18 +143,12 @@ namespace Necro.AutoGen.Controls
         private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
         private readonly InputAction m_Player_Cancel;
         private readonly InputAction m_Player_Confirm;
-        private readonly InputAction m_Player_Select;
         public struct PlayerActions
         {
             private @Controls m_Wrapper;
             public PlayerActions(@Controls wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Cancel
-            {
-                get => m_Wrapper.m_Player_Cancel;
-                set => throw new NotImplementedException();
-            }
+            public InputAction @Cancel => m_Wrapper.m_Player_Cancel;
             public InputAction @Confirm => m_Wrapper.m_Player_Confirm;
-            public InputAction @Select => m_Wrapper.m_Player_Select;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -191,9 +164,6 @@ namespace Necro.AutoGen.Controls
                 @Confirm.started += instance.OnConfirm;
                 @Confirm.performed += instance.OnConfirm;
                 @Confirm.canceled += instance.OnConfirm;
-                @Select.started += instance.OnSelect;
-                @Select.performed += instance.OnSelect;
-                @Select.canceled += instance.OnSelect;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -204,9 +174,6 @@ namespace Necro.AutoGen.Controls
                 @Confirm.started -= instance.OnConfirm;
                 @Confirm.performed -= instance.OnConfirm;
                 @Confirm.canceled -= instance.OnConfirm;
-                @Select.started -= instance.OnSelect;
-                @Select.performed -= instance.OnSelect;
-                @Select.canceled -= instance.OnSelect;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -228,7 +195,6 @@ namespace Necro.AutoGen.Controls
         {
             void OnCancel(InputAction.CallbackContext context);
             void OnConfirm(InputAction.CallbackContext context);
-            void OnSelect(InputAction.CallbackContext context);
         }
     }
 }

@@ -108,7 +108,7 @@ namespace Necro.GamePlay.Units
             UnitType = UnitType.Lady;
             crown.SetActive(true);
         }
-        public void MoveUnitToCell(Cell targetCell, bool isUnitKilling)
+        public void MoveUnitToCell(Cell targetCell)
         {
             _targetCell = targetCell;
             _isMoving = true;

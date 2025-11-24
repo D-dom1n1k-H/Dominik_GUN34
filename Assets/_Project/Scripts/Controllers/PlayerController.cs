@@ -20,9 +20,8 @@ namespace Necro.GamePlay.Controllers.PlayerController
         private Cell _targetCell;
 
         private Unit[] _units;
-        
-        private Random _random = new Random();
 
+        private bool _isMovementConfirmed = false;
         public bool UnitIsMoving { get; private set; }
 
         private void Awake()
@@ -43,20 +42,27 @@ namespace Necro.GamePlay.Controllers.PlayerController
 
             Debug.Log("<b>[PlayerController]</b> current train: " + _currentTrain);
         }
-
+        
         private void OnEnable()
         {
             _battlefield.OnMoveRequestEvent += OnUnitMovementStarted;
+            _battleController.OnPlayerMovementConfirmedEvent += ChangeIsMovementConfirmedField;
 
-            for (int i = 0; i < _units.Length; i++)
+            foreach (var t in _units)
             {
-                _units[i].OnMoveCompleted += OnUnitMovementEnded;
+                t.OnMoveCompleted += OnUnitMovementEnded;
             }
         }
 
         private void OnDisable()
         {
             _battlefield.OnMoveRequestEvent -= OnUnitMovementStarted;
+            _battleController.OnPlayerMovementConfirmedEvent -= ChangeIsMovementConfirmedField;
+            
+            foreach (var t in _units)
+            {
+                t.OnMoveCompleted -= OnUnitMovementEnded;
+            }
         }
 
         #region Public API
@@ -66,6 +72,11 @@ namespace Necro.GamePlay.Controllers.PlayerController
             return _currentTrain;
         }
 
+        public bool GetIsMovementConfirmed()
+        {
+            return _isMovementConfirmed;
+        }
+        
         public void ChangeCurrentTrainToOpositeOne()
         {
             if (_currentTrain == CurrentTrain.WhiteTeam)
@@ -86,10 +97,11 @@ namespace Necro.GamePlay.Controllers.PlayerController
 
         private void OnUnitMovementStarted(Cell currentCell, Cell targetCell)
         {
-            if (currentCell.GetCurrentUnit() != null)
+            if (currentCell.GetCurrentUnit() != null && _isMovementConfirmed)
             {
-                currentCell.GetCurrentUnit().MoveUnitToCell(targetCell, false);
+                currentCell.GetCurrentUnit().MoveUnitToCell(targetCell);
                 UnitIsMoving = true;
+                _isMovementConfirmed = false;
                 _battleController.BlockPlayerInput();
             }
         }
@@ -100,6 +112,10 @@ namespace Necro.GamePlay.Controllers.PlayerController
             _battleController.UnblockPlayerInput();
         }
 
+        private void ChangeIsMovementConfirmedField(bool isConfirmed)
+        {
+            _isMovementConfirmed = isConfirmed;
+        }
         #endregion
 
         [Inject]

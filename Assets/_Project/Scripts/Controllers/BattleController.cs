@@ -17,7 +17,7 @@ namespace Necro.GamePlay.Controllers
         private GameStatus[] _lastGameStatus = new GameStatus[1];
 
         public event Action<GameObject> OnGameStatusModeChangedEvent;
-        public event Action OnMovePreformedEvent;
+        public event Action<bool> OnPlayerMovementConfirmedEvent;
 
         private void Awake()
         {
@@ -30,7 +30,6 @@ namespace Necro.GamePlay.Controllers
 
             _controls.Player.Cancel.performed += OnPlayerCancel_performed;
             _controls.Player.Confirm.performed += OnPlayerConfirm_performed;
-            _controls.Player.Select.performed += OnPlayerSelect_performed;
         }
 
         private void OnDisable()
@@ -38,21 +37,17 @@ namespace Necro.GamePlay.Controllers
             _controls.Player.Disable();
             _controls.Player.Cancel.performed -= OnPlayerCancel_performed;
             _controls.Player.Confirm.performed -= OnPlayerConfirm_performed;
-            _controls.Player.Select.performed -= OnPlayerSelect_performed;
-        }
-
-        private void OnPlayerSelect_performed(InputAction.CallbackContext obj)
-        {
         }
 
         private void OnPlayerConfirm_performed(InputAction.CallbackContext obj)
         {
-            OnMovePreformedEvent?.Invoke();
+            OnPlayerMovementConfirmedEvent?.Invoke(true);
             Debug.Log("<b>[BattleController]</b> OnMovePreformedEvent was invoked");
         }
 
         private void OnPlayerCancel_performed(InputAction.CallbackContext obj)
         {
+            _battlefield.HidePossibleMoves();
             SetGameStatusModeToLastOne(gameObject);
         }
 
@@ -148,7 +143,7 @@ namespace Necro.GamePlay.Controllers
             }
         }
 
-        private void SetGameStatusModeToLastOne(GameObject sender)
+        public void SetGameStatusModeToLastOne(GameObject sender)
         {
             _gameStatus = _lastGameStatus[0];
             OnGameStatusModeChangedEvent?.Invoke(sender);

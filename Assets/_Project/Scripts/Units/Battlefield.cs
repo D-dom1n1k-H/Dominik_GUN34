@@ -9,6 +9,7 @@ using Necro.GamePlay.Controllers;
 using Necro.GamePlay.Controllers.PlayerController;
 using Necro.GamePlay.Units;
 using Necro.World.Board.Cell;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -22,6 +23,8 @@ namespace Necro.World.Battlefield
 
         [SerializeField]
         private BorderCells borderCells;
+        [SerializeField]
+        private GameObject confirmMovementText;
 
         // for movement
         private Cell _whiteFrCell;
@@ -36,6 +39,9 @@ namespace Necro.World.Battlefield
 
         private Cell _targetCell;
         private Cell _pastCell;
+
+        private Cell _pendingTargetCell;
+        private Cell _pendingFromCell;
 
         private bool _unitIsMoving;
         //
@@ -57,6 +63,8 @@ namespace Necro.World.Battlefield
 
         private void OnEnable()
         {
+            _battleController.OnPlayerMovementConfirmedEvent += OnPlayerMovementConfirmed;
+
             foreach (var t in _cells)
             {
                 t.OnPointerClickEvent += OnCellClicked;
@@ -70,6 +78,8 @@ namespace Necro.World.Battlefield
 
         private void OnDisable()
         {
+            _battleController.OnPlayerMovementConfirmedEvent -= OnPlayerMovementConfirmed;
+
             foreach (var t in _cells)
             {
                 t.OnPointerClickEvent -= OnCellClicked;
@@ -86,6 +96,14 @@ namespace Necro.World.Battlefield
         public void IsUnitMoving(bool isMoving)
         {
             _unitIsMoving = isMoving;
+        }
+
+        public void HidePossibleMoves()
+        {
+            foreach (var c in _cells)
+            {
+                c.ResetSelect();
+            }
         }
 
         #endregion
@@ -133,7 +151,7 @@ namespace Necro.World.Battlefield
                      _cellPalletSettings.SelectCellMaterial.color) // без .color не работало сравнение (==)
             {
                 cell.ResetSelect();
-                TryToHidePossibleMoves();
+                HidePossibleMoves();
             }
 
             else if (cell.SelectIsActive &&
@@ -211,7 +229,6 @@ namespace Necro.World.Battlefield
                 }
             }
         }
-        
 
         private void OnUnitMoveCompleted(Unit unit)
         {
@@ -248,14 +265,14 @@ namespace Necro.World.Battlefield
 
             _playerController.ChangeCurrentTrainToOpositeOne();
         }
-        
+
         private void TryToMarkPossibleMoves(Cell cell)
         {
             if (cell.GetCurrentUnit() == null) return;
 
             var cellsTeam = cell.GetCurrentUnit().Team;
 
-            TryToHidePossibleMoves();
+            HidePossibleMoves();
 
             _whiteFrCell = _whiteBrCell = _whiteFlCell = _whiteBlCell = null;
             _blackFrCell = _blackBrCell = _blackFlCell = _blackBlCell = null;
@@ -354,7 +371,7 @@ namespace Necro.World.Battlefield
                     break;
             }
         }
-        
+
         private void MarkLadyMoves(Cell originCell, NeighbourType direction, Team enemyTeam)
         {
             var currentCell = originCell;
@@ -385,15 +402,7 @@ namespace Necro.World.Battlefield
                 break;
             }
         }
-        
-        private void TryToHidePossibleMoves()
-        {
-            foreach (var c in _cells)
-            {
-                c.ResetSelect();
-            }
-        }
-        
+
         private bool TryMarkDirection(Cell originCell, NeighbourType step, NeighbourType jump, Team enemyTeam,
             ref Cell outTargetCell)
         {
@@ -426,18 +435,39 @@ namespace Necro.World.Battlefield
 
             return false;
         }
-        
-        private void HandleMoveToCell(Cell targetCell)
-        {
-            TryToHidePossibleMoves();
-            _pastCell.ResetSelect();
 
-            if (_pastCell.Select.material.color == _cellPalletSettings.SelectCellMaterial.color)
+        private void OnPlayerMovementConfirmed(bool isConfirmed)
+        {
+            if (_pendingTargetCell != null && _pendingFromCell != null && isConfirmed == true)
             {
-                OnMoveRequestEvent?.Invoke(_pastCell, targetCell);
+                confirmMovementText.SetActive(false);
+                OnMoveRequestEvent?.Invoke(_pendingFromCell, _pendingTargetCell);
+                _pendingTargetCell = null;
+                _pendingFromCell = null;
+
+                HidePossibleMoves();
+                _battleController.SetGameStatusModeToMove(gameObject);
+            }
+            else if (isConfirmed == false)
+            {
+                _pendingTargetCell = null;
+                _pendingFromCell = null;
+                HidePossibleMoves();
+                _battleController.SetGameStatusModeToLastOne(gameObject);
             }
         }
-        
+
+        private void HandleMoveToCell(Cell targetCell)
+        {
+            if (_pastCell.Select.material.color == _cellPalletSettings.SelectCellMaterial.color)
+            {
+                confirmMovementText.SetActive(true);
+                _pendingFromCell = _pastCell;
+                _pendingTargetCell = targetCell;
+                _battleController.SetGameStatusModeToConfirmMove(gameObject);
+            }
+        }
+
         #endregion
 
         [Inject]
@@ -459,6 +489,9 @@ namespace Necro.World.Battlefield
 
             if (_playerController == null)
                 throw new NullReferenceException("<b>[Battlefield]</b> _playerController could not be injected!");
+
+            if (confirmMovementText == null)
+                throw new NullReferenceException("<b>[Battlefield]</b> _confirmMovementText is null!");
         }
         /*
          * Battlefields task is mark Cells and send event to PlayerController if player is going to move checker
