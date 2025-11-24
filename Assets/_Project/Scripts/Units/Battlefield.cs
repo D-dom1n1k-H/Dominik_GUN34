@@ -26,7 +26,11 @@ namespace Necro.World.Battlefield
         // for movement
         private Cell _whiteFrCell;
         private Cell _whiteBrCell;
+        private Cell _whiteFlCell;
+        private Cell _whiteBlCell;
 
+        private Cell _blackFrCell;
+        private Cell _blackBrCell;
         private Cell _blackFlCell;
         private Cell _blackBlCell;
 
@@ -53,27 +57,27 @@ namespace Necro.World.Battlefield
 
         private void OnEnable()
         {
-            for (int i = 0; i < _cells.Length; i++)
+            foreach (var t in _cells)
             {
-                _cells[i].OnPointerClickEvent += OnCellClicked;
+                t.OnPointerClickEvent += OnCellClicked;
             }
 
-            for (int i = 0; i < _units.Length; i++)
+            foreach (var t in _units)
             {
-                _units[i].OnMoveCompleted += OnUnitMoveCompleted;
+                t.OnMoveCompleted += OnUnitMoveCompleted;
             }
         }
 
         private void OnDisable()
         {
-            for (int i = 0; i < _cells.Length; i++)
+            foreach (var t in _cells)
             {
-                _cells[i].OnPointerClickEvent -= OnCellClicked;
+                t.OnPointerClickEvent -= OnCellClicked;
             }
 
-            for (int i = 0; i < _units.Length; i++)
+            foreach (var t in _units)
             {
-                _units[i].OnMoveCompleted += OnUnitMoveCompleted;
+                t.OnMoveCompleted -= OnUnitMoveCompleted;
             }
         }
 
@@ -107,7 +111,7 @@ namespace Necro.World.Battlefield
             {
                 Debug.LogError($"<b>[Battlefield]</b> Cell {cell.gameObject.name} has no MeshRenderer");
             }
-            else if (!cell.SelectIsActive && cell.CurrentUnit != null)
+            else if (!cell.SelectIsActive && cell.GetCurrentUnit() != null)
             {
                 if (cell.GetCurrentUnit().Team == Team.White)
                 {
@@ -129,7 +133,7 @@ namespace Necro.World.Battlefield
                      _cellPalletSettings.SelectCellMaterial.color) // без .color не работало сравнение (==)
             {
                 cell.ResetSelect();
-                TryToHidePossibleMoves(cell);
+                TryToHidePossibleMoves();
             }
 
             else if (cell.SelectIsActive &&
@@ -140,62 +144,74 @@ namespace Necro.World.Battlefield
 
                 switch (cell)
                 {
+                    // white cells
                     case var c when c == _whiteFrCell:
                     {
-                        TryToHidePossibleMoves(_pastCell);
-                        _pastCell.ResetSelect();
-
-                        if (_pastCell.Select.material.color == _cellPalletSettings.SelectCellMaterial.color)
-                        {
-                            OnMoveRequestEvent?.Invoke(_pastCell, _whiteFrCell);
-                        }
+                        HandleMoveToCell(_whiteFrCell);
 
                         break;
                     }
-
 
                     case var c when c == _whiteBrCell:
                     {
-                        TryToHidePossibleMoves(_pastCell);
-                        _pastCell.ResetSelect();
-
-                        if (_pastCell.Select.material.color == _cellPalletSettings.SelectCellMaterial.color)
-                        {
-                            OnMoveRequestEvent?.Invoke(_pastCell, _whiteBrCell);
-                        }
+                        HandleMoveToCell(_whiteBrCell);
 
                         break;
                     }
 
+                    case var c when c == _whiteFlCell:
+                    {
+                        HandleMoveToCell(_whiteFlCell);
+
+                        break;
+                    }
+
+                    case var c when c == _whiteBlCell:
+                    {
+                        HandleMoveToCell(_whiteBlCell);
+
+                        break;
+                    }
+
+                    // black cells
+                    case var c when c == _blackFrCell:
+                    {
+                        HandleMoveToCell(_blackFrCell);
+
+                        break;
+                    }
+
+                    case var c when c == _blackBrCell:
+                    {
+                        HandleMoveToCell(_blackBrCell);
+
+                        break;
+                    }
 
                     case var c when c == _blackFlCell:
                     {
-                        TryToHidePossibleMoves(_pastCell);
-                        _pastCell.ResetSelect();
-
-                        if (_pastCell.Select.material.color == _cellPalletSettings.SelectCellMaterial.color)
-                        {
-                            OnMoveRequestEvent?.Invoke(_pastCell, _blackFlCell);
-                        }
+                        HandleMoveToCell(_blackFlCell);
 
                         break;
                     }
 
                     case var c when c == _blackBlCell:
                     {
-                        TryToHidePossibleMoves(_pastCell);
-                        _pastCell.ResetSelect();
+                        HandleMoveToCell(_blackBlCell);
 
-                        if (_pastCell.Select.material.color == _cellPalletSettings.SelectCellMaterial.color)
-                        {
-                            OnMoveRequestEvent?.Invoke(_pastCell, _blackBlCell);
-                        }
+                        break;
+                    }
+
+                    default:
+                    {
+                        HandleMoveToCell(cell);
 
                         break;
                     }
                 }
             }
         }
+        
 
         private void OnUnitMoveCompleted(Unit unit)
         {
@@ -232,17 +248,17 @@ namespace Necro.World.Battlefield
 
             _playerController.ChangeCurrentTrainToOpositeOne();
         }
-
+        
         private void TryToMarkPossibleMoves(Cell cell)
         {
-            if (cell.CurrentUnit == null) return;
+            if (cell.GetCurrentUnit() == null) return;
 
-            var cellsTeam = cell.CurrentUnit.Team;
+            var cellsTeam = cell.GetCurrentUnit().Team;
 
-            foreach (var c in _cells)
-            {
-                c.ResetSelect();
-            }
+            TryToHidePossibleMoves();
+
+            _whiteFrCell = _whiteBrCell = _whiteFlCell = _whiteBlCell = null;
+            _blackFrCell = _blackBrCell = _blackFlCell = _blackBlCell = null;
 
             cell.SetSelect(_cellPalletSettings.SelectCellMaterial);
 
@@ -251,205 +267,177 @@ namespace Necro.World.Battlefield
                 case Team.White:
                     if (cell.GetCurrentUnit().UnitType == UnitType.Default) // normal unit type
                     {
-                        if (cell.Neighbours.TryGetValue(NeighbourType.ForwardRight, out var fr) && fr != null)
+                        TryMarkDirection(cell, NeighbourType.ForwardRight, NeighbourType.ForwardRight, Team.Black,
+                            ref _whiteFrCell);
+                        TryMarkDirection(cell, NeighbourType.BackRight, NeighbourType.BackRight, Team.Black,
+                            ref _whiteBrCell);
+
+                        if (cell.Neighbours.TryGetValue(NeighbourType.BackLeft, out var backLeft))
                         {
-                            if (fr.CurrentUnit == null)
+                            if (backLeft.GetCurrentUnit() != null && backLeft.GetCurrentUnit().Team == Team.Black)
                             {
-                                fr.SetSelect(_cellPalletSettings.MoveCellMaterial);
-                                _whiteFrCell = fr;
-                            }
-                            else if (fr.CurrentUnit != null && fr.CurrentUnit.Team == Team.Black)
-                            {
-                                fr.SetSelect(_cellPalletSettings.AttackCellMaterial);
+                                if (backLeft.Neighbours.TryGetValue(NeighbourType.BackLeft, out var bL)
+                                    && bL.GetCurrentUnit() == null)
+                                {
+                                    backLeft.SetSelect(_cellPalletSettings.AttackCellMaterial);
+                                    bL.SetSelect(_cellPalletSettings.MoveCellMaterial);
+                                }
                             }
                         }
 
-                        if (cell.Neighbours.TryGetValue(NeighbourType.BackRight, out var br) && br != null)
+                        if (cell.Neighbours.TryGetValue(NeighbourType.ForwardLeft, out var forwardLeft))
                         {
-                            if (br.CurrentUnit == null)
+                            if (forwardLeft.GetCurrentUnit() != null && forwardLeft.GetCurrentUnit().Team == Team.Black)
                             {
-                                br.SetSelect(_cellPalletSettings.MoveCellMaterial);
-                                _whiteBrCell = br;
-                            }
-                            else if (br.CurrentUnit != null && br.CurrentUnit.Team == Team.Black)
-                            {
-                                br.SetSelect(_cellPalletSettings.AttackCellMaterial);
+                                if (forwardLeft.Neighbours.TryGetValue(NeighbourType.ForwardLeft, out var fL) &&
+                                    fL.GetCurrentUnit() == null)
+                                {
+                                    forwardLeft.SetSelect(_cellPalletSettings.AttackCellMaterial);
+                                    fL.SetSelect(_cellPalletSettings.MoveCellMaterial);
+                                }
                             }
                         }
                     }
-                    else if (cell.GetCurrentUnit().UnitType == UnitType.Lady) // lady unit ype
+                    else if (cell.GetCurrentUnit().UnitType == UnitType.Lady) // lady unit type
                     {
-                        if (cell.Neighbours.TryGetValue(NeighbourType.ForwardRight, out var fr) && fr != null)
-                        {
-                            if (fr.CurrentUnit == null)
-                            {
-                                fr.SetSelect(_cellPalletSettings.MoveCellMaterial);
-                                _whiteFrCell = fr;
-                            }
-                            else if (fr.CurrentUnit != null && fr.CurrentUnit.Team == Team.Black)
-                            {
-                                fr.SetSelect(_cellPalletSettings.AttackCellMaterial);
-                            }
-                        }
-
-                        if (cell.Neighbours.TryGetValue(NeighbourType.BackRight, out var br) && br != null)
-                        {
-                            if (br.CurrentUnit == null)
-                            {
-                                br.SetSelect(_cellPalletSettings.MoveCellMaterial);
-                                _whiteBrCell = br;
-                            }
-                            else if (br.CurrentUnit != null && br.CurrentUnit.Team == Team.Black)
-                            {
-                                br.SetSelect(_cellPalletSettings.AttackCellMaterial);
-                            }
-                        }
-
-                        if (cell.Neighbours.TryGetValue(NeighbourType.BackLeft, out var barkLeft) && barkLeft != null)
-                        {
-                            if (barkLeft.CurrentUnit == null)
-                            {
-                                barkLeft.SetSelect(_cellPalletSettings.MoveCellMaterial);
-                                _blackBlCell = barkLeft;
-                            }
-                            else if (barkLeft.CurrentUnit != null && barkLeft.CurrentUnit.Team == Team.White)
-                            {
-                                barkLeft.SetSelect(_cellPalletSettings.AttackCellMaterial);
-                            }
-                        }
-
-                        if (cell.Neighbours.TryGetValue(NeighbourType.ForwardLeft, out var forwardLeft) &&
-                            forwardLeft != null)
-                        {
-                            if (forwardLeft.CurrentUnit == null)
-                            {
-                                forwardLeft.SetSelect(_cellPalletSettings.MoveCellMaterial);
-                                _blackFlCell = forwardLeft;
-                            }
-                            else if (forwardLeft.CurrentUnit != null && forwardLeft.CurrentUnit.Team == Team.White)
-                            {
-                                forwardLeft.SetSelect(_cellPalletSettings.AttackCellMaterial);
-                            }
-                        }
+                        MarkLadyMoves(cell, NeighbourType.ForwardRight, Team.Black);
+                        MarkLadyMoves(cell, NeighbourType.BackRight, Team.Black);
+                        MarkLadyMoves(cell, NeighbourType.ForwardLeft, Team.Black);
+                        MarkLadyMoves(cell, NeighbourType.BackLeft, Team.Black);
                     }
 
                     break;
 
                 case Team.Black:
-                    if (cell.GetCurrentUnit().UnitType == UnitType.Default)
+                    if (cell.GetCurrentUnit().UnitType == UnitType.Default) // normal unit type
                     {
-                        if (cell.Neighbours.TryGetValue(NeighbourType.BackLeft, out var bl) && bl != null)
+                        TryMarkDirection(cell, NeighbourType.BackLeft, NeighbourType.BackLeft, Team.White,
+                            ref _blackBlCell);
+                        TryMarkDirection(cell, NeighbourType.ForwardLeft, NeighbourType.ForwardLeft, Team.White,
+                            ref _blackFlCell);
+
+                        if (cell.Neighbours.TryGetValue(NeighbourType.ForwardRight, out var forwardRight))
                         {
-                            if (bl.CurrentUnit == null)
+                            if (forwardRight.GetCurrentUnit() != null &&
+                                forwardRight.GetCurrentUnit().Team == Team.White)
                             {
-                                bl.SetSelect(_cellPalletSettings.MoveCellMaterial);
-                                _blackBlCell = bl;
-                            }
-                            else if (bl.CurrentUnit != null && bl.CurrentUnit.Team == Team.White)
-                            {
-                                bl.SetSelect(_cellPalletSettings.AttackCellMaterial);
+                                if (forwardRight.Neighbours.TryGetValue(NeighbourType.ForwardRight, out var fR)
+                                    && fR.GetCurrentUnit() == null)
+                                {
+                                    forwardRight.SetSelect(_cellPalletSettings.AttackCellMaterial);
+                                    fR.SetSelect(_cellPalletSettings.MoveCellMaterial);
+                                }
                             }
                         }
 
-                        if (cell.Neighbours.TryGetValue(NeighbourType.ForwardLeft, out var fl) && fl != null)
+                        if (cell.Neighbours.TryGetValue(NeighbourType.BackRight, out var backRight))
                         {
-                            if (fl.CurrentUnit == null)
+                            if (backRight.GetCurrentUnit() != null && backRight.GetCurrentUnit().Team == Team.White)
                             {
-                                fl.SetSelect(_cellPalletSettings.MoveCellMaterial);
-                                _blackFlCell = fl;
-                            }
-                            else if (fl.CurrentUnit != null && fl.CurrentUnit.Team == Team.White)
-                            {
-                                fl.SetSelect(_cellPalletSettings.AttackCellMaterial);
+                                if (backRight.Neighbours.TryGetValue(NeighbourType.ForwardLeft, out var bR) &&
+                                    bR.GetCurrentUnit() == null)
+                                {
+                                    backRight.SetSelect(_cellPalletSettings.AttackCellMaterial);
+                                    bR.SetSelect(_cellPalletSettings.MoveCellMaterial);
+                                }
                             }
                         }
                     }
-                    else if (cell.GetCurrentUnit().UnitType == UnitType.Lady)
+                    else if (cell.GetCurrentUnit().UnitType == UnitType.Lady) // lady unit type
                     {
-                        if (cell.Neighbours.TryGetValue(NeighbourType.ForwardRight, out var fr) && fr != null)
-                        {
-                            if (fr.CurrentUnit == null)
-                            {
-                                fr.SetSelect(_cellPalletSettings.MoveCellMaterial);
-                                _whiteFrCell = fr;
-                            }
-                            else if (fr.CurrentUnit != null && fr.CurrentUnit.Team == Team.Black)
-                            {
-                                fr.SetSelect(_cellPalletSettings.AttackCellMaterial);
-                            }
-                        }
-
-                        if (cell.Neighbours.TryGetValue(NeighbourType.BackRight, out var br) && br != null)
-                        {
-                            if (br.CurrentUnit == null)
-                            {
-                                br.SetSelect(_cellPalletSettings.MoveCellMaterial);
-                                _whiteBrCell = br;
-                            }
-                            else if (br.CurrentUnit != null && br.CurrentUnit.Team == Team.Black)
-                            {
-                                br.SetSelect(_cellPalletSettings.AttackCellMaterial);
-                            }
-                        }
-
-                        if (cell.Neighbours.TryGetValue(NeighbourType.BackLeft, out var barkLeft) && barkLeft != null)
-                        {
-                            if (barkLeft.CurrentUnit == null)
-                            {
-                                barkLeft.SetSelect(_cellPalletSettings.MoveCellMaterial);
-                                _blackBlCell = barkLeft;
-                            }
-                            else if (barkLeft.CurrentUnit != null && barkLeft.CurrentUnit.Team == Team.White)
-                            {
-                                barkLeft.SetSelect(_cellPalletSettings.AttackCellMaterial);
-                            }
-                        }
-
-                        if (cell.Neighbours.TryGetValue(NeighbourType.ForwardLeft, out var forwardLeft) &&
-                            forwardLeft != null)
-                        {
-                            if (forwardLeft.CurrentUnit == null)
-                            {
-                                forwardLeft.SetSelect(_cellPalletSettings.MoveCellMaterial);
-                                _blackFlCell = forwardLeft;
-                            }
-                            else if (forwardLeft.CurrentUnit != null && forwardLeft.CurrentUnit.Team == Team.White)
-                            {
-                                forwardLeft.SetSelect(_cellPalletSettings.AttackCellMaterial);
-                            }
-                        }
+                        MarkLadyMoves(cell, NeighbourType.ForwardRight, Team.White);
+                        MarkLadyMoves(cell, NeighbourType.BackRight, Team.White);
+                        MarkLadyMoves(cell, NeighbourType.ForwardLeft, Team.White);
+                        MarkLadyMoves(cell, NeighbourType.BackLeft, Team.White);
                     }
 
                     break;
             }
         }
-
-        private void TryToHidePossibleMoves(Cell cell)
+        
+        private void MarkLadyMoves(Cell originCell, NeighbourType direction, Team enemyTeam)
         {
-            if (cell.CurrentUnit == null) return;
+            var currentCell = originCell;
 
-            var cellsTeam = cell.CurrentUnit.Team;
-            switch (cellsTeam)
+            while (true)
             {
-                case Team.White:
-                    if (cell.Neighbours.TryGetValue(NeighbourType.ForwardRight, out var fr) && fr != null)
-                        fr.ResetSelect();
-
-                    if (cell.Neighbours.TryGetValue(NeighbourType.BackRight, out var br) && br != null)
-                        br.ResetSelect();
-
+                if (!currentCell.Neighbours.TryGetValue(direction, out var nextCell) || nextCell == null)
                     break;
 
-                case Team.Black:
-                    if (cell.Neighbours.TryGetValue(NeighbourType.BackLeft, out var bl) && bl != null)
-                        bl.ResetSelect();
+                var unit = nextCell.GetCurrentUnit();
 
-                    if (cell.Neighbours.TryGetValue(NeighbourType.ForwardLeft, out var fl) && fl != null)
-                        fl.ResetSelect();
+                if (unit == null)
+                {
+                    nextCell.SetSelect(_cellPalletSettings.MoveCellMaterial);
+                    currentCell = nextCell;
+                    continue;
+                }
+
+                if (!nextCell.Neighbours.TryGetValue(direction, out var jumpCell) || jumpCell == null)
                     break;
+
+                if (jumpCell.GetCurrentUnit() == null)
+                {
+                    nextCell.SetSelect(_cellPalletSettings.AttackCellMaterial);
+                    jumpCell.SetSelect(_cellPalletSettings.MoveCellMaterial);
+                }
+
+                break;
             }
         }
+        
+        private void TryToHidePossibleMoves()
+        {
+            foreach (var c in _cells)
+            {
+                c.ResetSelect();
+            }
+        }
+        
+        private bool TryMarkDirection(Cell originCell, NeighbourType step, NeighbourType jump, Team enemyTeam,
+            ref Cell outTargetCell)
+        {
+            if (originCell == null) return false;
+            if (!originCell.Neighbours.TryGetValue(step, out var stepCell) || stepCell == null) return false;
 
+            var stepUnit = stepCell.GetCurrentUnit();
+
+            if (stepUnit == null)
+            {
+                stepCell.SetSelect(_cellPalletSettings.MoveCellMaterial);
+                outTargetCell = stepCell;
+                return true;
+            }
+
+            if (stepUnit != null && stepUnit.Team == enemyTeam)
+            {
+                stepCell.Neighbours.TryGetValue(jump, out var jumpCell);
+
+                if (jumpCell == null) return false;
+
+                if (jumpCell.GetCurrentUnit() == null && stepCell.GetCurrentUnit().Team == enemyTeam)
+                {
+                    stepCell.SetSelect(_cellPalletSettings.AttackCellMaterial);
+                    jumpCell.SetSelect(_cellPalletSettings.MoveCellMaterial);
+                    outTargetCell = jumpCell;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        
+        private void HandleMoveToCell(Cell targetCell)
+        {
+            TryToHidePossibleMoves();
+            _pastCell.ResetSelect();
+
+            if (_pastCell.Select.material.color == _cellPalletSettings.SelectCellMaterial.color)
+            {
+                OnMoveRequestEvent?.Invoke(_pastCell, targetCell);
+            }
+        }
+        
         #endregion
 
         [Inject]

@@ -86,9 +86,9 @@ namespace Necro.GamePlay.Controllers.PlayerController
 
         private void OnUnitMovementStarted(Cell currentCell, Cell targetCell)
         {
-            if (currentCell.CurrentUnit != null)
+            if (currentCell.GetCurrentUnit() != null)
             {
-                currentCell.CurrentUnit.MoveUnitToCell(targetCell);
+                currentCell.GetCurrentUnit().MoveUnitToCell(targetCell, false);
                 UnitIsMoving = true;
                 _battleController.BlockPlayerInput();
             }

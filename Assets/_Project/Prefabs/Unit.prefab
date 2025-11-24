@@ -1389,7 +1389,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 129
+  m_VersionIndex: 135
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1457,7 +1457,7 @@ MonoBehaviour:
   whiteCheckerMaterial: {fileID: 2100000, guid: 91fe80227e3841e4c9c13d3f4017da6d, type: 2}
   blackCheckerMaterial: {fileID: 2100000, guid: 44c6f52218a0b3a42833fb2ed58b96e6, type: 2}
   crown: {fileID: 4178721043955519942}
-  movementSpeed: 3
+  movementSpeed: 5
 --- !u!1001 &3836122916159106199
 PrefabInstance:
   m_ObjectHideFlags: 0

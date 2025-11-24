@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Necro.Config.CellPalleteSettings;
+using Necro.Config.DefaultSettings;
 using Necro.Extra.Enums.NeighbourType;
 using Necro.GamePlay.Controllers;
 using Necro.GamePlay.Units;
@@ -13,6 +14,7 @@ namespace Necro.World.Board.Cell
     public class Cell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         private BattleController _battleController; // injected
+        private DefaultSettings _projectSettings; //inject
         private CellPalletSettings _cellPalletSettings; // injected
 
         [SerializeField, Space(10f)]
@@ -24,13 +26,15 @@ namespace Necro.World.Board.Cell
         [SerializeField]
         private Material blackCellMaterial;
 
+        private Unit _currentUnit;
+
         public MeshRenderer Select => select;
         private MeshRenderer _meshRenderer;
 
         public bool SelectIsActive { get; private set; } = false;
-        public Unit CurrentUnit { get; private set; }
 
         public readonly Dictionary<NeighbourType, Cell> Neighbours = new Dictionary<NeighbourType, Cell>(8);
+        public List<Cell> possibleMovesForLady = new List<Cell>();
 
         public event Action<Cell> OnPointerClickEvent;
 
@@ -57,16 +61,17 @@ namespace Necro.World.Board.Cell
             if (unit == null)
                 return;
 
-            if (CurrentUnit != null && CurrentUnit != unit)
+            if (_currentUnit != null && _currentUnit != unit)
             {
-                UnsubscribeFromUnit(CurrentUnit);
-                CurrentUnit = null;
+                _currentUnit.DestroyUnit();
+                UnsubscribeFromUnit(_currentUnit);
+                _currentUnit = null;
             }
             else if (_meshRenderer.material.color == blackCellMaterial.color)
             {
-                CurrentUnit = unit;
-                SubscribeToUnit(CurrentUnit);
-                CurrentUnit.SetCurrentCell(this);
+                _currentUnit = unit;
+                SubscribeToUnit(_currentUnit);
+                _currentUnit.SetCurrentCell(this);
             }
         }
 
@@ -76,10 +81,10 @@ namespace Necro.World.Board.Cell
             if (unit == null)
                 return;
 
-            if (CurrentUnit == unit)
+            if (_currentUnit == unit)
             {
-                UnsubscribeFromUnit(CurrentUnit);
-                CurrentUnit = null;
+                UnsubscribeFromUnit(_currentUnit);
+                _currentUnit = null;
             }
         }
 
@@ -97,8 +102,8 @@ namespace Necro.World.Board.Cell
 
         #region Public API
 
-        public Unit GetCurrentUnit() => CurrentUnit;
-        public void SetCurrentUnit(Unit unit) => CurrentUnit = unit;
+        public Unit GetCurrentUnit() => _currentUnit;
+        public void SetCurrentUnit(Unit unit) => _currentUnit = unit;
 
         public void SetSelect(Material material)
         {
@@ -182,7 +187,7 @@ namespace Necro.World.Board.Cell
             unit.OnUnitExit -= OnCellExited;
             unit.OnUnitClicked -= OnCellClicked;
         }
-        
+
         private void OnCellClicked(Cell cell) => OnPointerClickEvent?.Invoke(cell);
         private void OnCellEntered(Cell cell) => cell.focus.enabled = true;
         private void OnCellExited(Cell cell) => cell.focus.enabled = false;
@@ -190,10 +195,12 @@ namespace Necro.World.Board.Cell
         #endregion
 
         [Inject]
-        private void Construct(BattleController battleController, CellPalletSettings cellPalletSettings)
+        private void Construct(BattleController battleController, CellPalletSettings cellPalletSettings,
+            DefaultSettings defaultSettings)
         {
             _battleController = battleController;
             _cellPalletSettings = cellPalletSettings;
+            _projectSettings = defaultSettings;
         }
 
         private void ValidateDependencies()
@@ -206,6 +213,8 @@ namespace Necro.World.Board.Cell
                 throw new NullReferenceException("<b>[Cell]</b> _battleController is could not be injected!");
             if (_cellPalletSettings == null)
                 throw new NullReferenceException("<b>[Cell]</b> _cellPalletSettings is could not be injected!");
+            if (_projectSettings == null)
+                throw new NullReferenceException("[Cell]</b> _projectSettings is could not be injected!");
         }
 
         /*
