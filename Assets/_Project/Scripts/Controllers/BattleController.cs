@@ -1,9 +1,11 @@
 using System;
 using Necro.AutoGen.Controls;
+using Necro.Config.DefaultSettings;
 using Necro.Extra.GameStatus;
 using Necro.World.Battlefield;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using Zenject;
 
 namespace Necro.GamePlay.Controllers
@@ -13,6 +15,14 @@ namespace Necro.GamePlay.Controllers
         private Controls _controls; //injected
         private Battlefield _battlefield; //injected
         private GameStatus _gameStatus; //injected
+        private DefaultSettings _projectSettings; // injected
+
+        private Sprite[] _avatarImages;
+        [SerializeField]
+        private Image whitePlayerAvatarImage;
+        [SerializeField]
+        private Image blackPlayerAvatarImage;
+
 
         private GameStatus[] _lastGameStatus = new GameStatus[1];
 
@@ -22,6 +32,17 @@ namespace Necro.GamePlay.Controllers
         private void Awake()
         {
             ValidateDependencies();
+        }
+
+        private void Start()
+        {
+            _avatarImages = _projectSettings.uiSettings.avatarImages;
+            
+            var randomValue = (byte)UnityEngine.Random.Range(0, _avatarImages.Length);
+            whitePlayerAvatarImage.sprite = _avatarImages[randomValue];
+            
+            randomValue = (byte)UnityEngine.Random.Range(0, _avatarImages.Length);
+            blackPlayerAvatarImage.sprite = _avatarImages[randomValue];
         }
 
         private void OnEnable()
@@ -155,20 +176,31 @@ namespace Necro.GamePlay.Controllers
         #endregion
 
         [Inject]
-        private void Construct(Controls controls, GameStatus gameStatus, Battlefield battlefield)
+        private void Construct(Controls controls, GameStatus gameStatus, Battlefield battlefield,
+            DefaultSettings projectSettings)
         {
             _controls = controls;
             _gameStatus = gameStatus;
             _battlefield = battlefield;
+            _projectSettings = projectSettings;
         }
 
         private void ValidateDependencies()
         {
             if (_controls == null)
-                throw new NullReferenceException("[BattleController] _controls could not be injected!");
+                throw new NullReferenceException("<b>[BattleController]</b> _controls could not be injected!");
 
             if (_battlefield == null)
-                throw new NullReferenceException("[BattleController] _battlefield could not be injected!");
+                throw new NullReferenceException("<b>[BattleController]</b> _battlefield could not be injected!");
+
+            if (_projectSettings == null)
+                throw new NullReferenceException("<b>[BattleController]</b> _projectSettings could not be injected!");
+
+            if (whitePlayerAvatarImage == null)
+                throw new NullReferenceException("<b>[BattleController]</b> whitePlayerAvatarImage is null!");
+
+            if (blackPlayerAvatarImage == null)
+                throw new NullReferenceException("<b>[BattleController]</b> blackPlayerAvatarImage is null!");
         }
 
         /*

@@ -12,5 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e619948c0219774882d28032d753549, type: 3}
   m_Name: ProjectSettings
   m_EditorClassIdentifier: 
+  uiSettings:
+    AvatarImages:
+    - {fileID: 21300000, guid: 6573395314a192b4bb1cd1160c065438, type: 3}
+    - {fileID: 21300000, guid: 9d1fdf1470152754788455228467b50e, type: 3}
+    - {fileID: 21300000, guid: 95ffecfa32e2ba544a2880bee4431459, type: 3}
+    - {fileID: 21300000, guid: 743a12931cf208346b3113bc47c43aa3, type: 3}
   unitSettings:
-    speed: 3
+    speed: 4

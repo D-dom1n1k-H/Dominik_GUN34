@@ -1,5 +1,7 @@
 using System;
+using UnityEditor.VersionControl;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Necro.Config.DefaultSettings
 {
@@ -34,6 +36,8 @@ namespace Necro.Config.DefaultSettings
         [Serializable]
         public struct UiSettings
         {
+            [Space(10f), Tooltip("Put in this array images and random is going to chose some images")]
+            public Sprite[] avatarImages;
         }
     }
 }

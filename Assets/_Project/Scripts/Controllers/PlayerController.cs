@@ -4,6 +4,7 @@ using Necro.GamePlay.Units;
 using Necro.World.Battlefield;
 using Necro.World.Board.Cell;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 using Random = Unity.Mathematics.Random;
 
@@ -14,6 +15,9 @@ namespace Necro.GamePlay.Controllers.PlayerController
         private Battlefield _battlefield; //injected
         private BattleController _battleController; //injected
         private CurrentTrain _currentTrain; //injected
+        
+        [SerializeField]
+        private Image arrowImage;
 
         // for movement
         private Cell _currentCell;
@@ -35,10 +39,16 @@ namespace Necro.GamePlay.Controllers.PlayerController
         {
             var randomValue = (byte)UnityEngine.Random.Range(0, 2);
 
-            if (randomValue == 0) 
+            if (randomValue == 0)
+            {
                 _currentTrain = CurrentTrain.WhiteTeam;
+                arrowImage.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
             else if (randomValue == 1)
+            {
                 _currentTrain = CurrentTrain.BlackTeam;
+                arrowImage.transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
 
             Debug.Log("<b>[PlayerController]</b> current train: " + _currentTrain);
         }
@@ -82,10 +92,12 @@ namespace Necro.GamePlay.Controllers.PlayerController
             if (_currentTrain == CurrentTrain.WhiteTeam)
             {
                 _currentTrain = CurrentTrain.BlackTeam;
+                arrowImage.transform.rotation = Quaternion.Euler(0, 180, 0);
             }
             else if (_currentTrain == CurrentTrain.BlackTeam)
             {
                 _currentTrain = CurrentTrain.WhiteTeam;
+                arrowImage.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
             
             Debug.Log($"<b>[PlayerController]</b> CurrentTrain was changed to: {_currentTrain}");
@@ -133,6 +145,9 @@ namespace Necro.GamePlay.Controllers.PlayerController
 
             if (_battleController == null)
                 throw new NullReferenceException("<b>[PlayerController]</b> _battlefield could not be injected!");
+
+            if (arrowImage == null)
+                throw new NullReferenceException("<b>[PlayerController]</b> arrowImage is null!");
         }
         /*
          * PlayerController is used to move checkers and block players input while is doing that
