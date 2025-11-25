@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ProjectSettings
   m_EditorClassIdentifier: 
   uiSettings:
-    AvatarImages:
+    avatarImages:
     - {fileID: 21300000, guid: 6573395314a192b4bb1cd1160c065438, type: 3}
     - {fileID: 21300000, guid: 9d1fdf1470152754788455228467b50e, type: 3}
     - {fileID: 21300000, guid: 95ffecfa32e2ba544a2880bee4431459, type: 3}

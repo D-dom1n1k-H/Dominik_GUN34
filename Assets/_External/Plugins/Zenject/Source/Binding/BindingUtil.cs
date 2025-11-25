@@ -7,12 +7,14 @@ using Zenject.Internal;
 using TypeExtensions = ModestTree.TypeExtensions;
 
 #if !NOT_UNITY3D
-using UnityEditor;
-#if UNITY_EDITOR
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
 #endif
 
 #endif
+
 
 namespace Zenject
 {

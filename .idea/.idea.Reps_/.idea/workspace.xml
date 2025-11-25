@@ -6,12 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="046f749b-7f49-406f-8c95-90afc496fca3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Reps_/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Reps_/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_External/Plugins/Zenject/Source/Binding/BindingUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_External/Plugins/Zenject/Source/Binding/BindingUtil.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_GlobalSettings/Rendering/URP-Asset.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_GlobalSettings/Rendering/URP-Asset.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Project/Scenes/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scenes/GameScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scripts/Controllers/BattleController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scripts/Controllers/BattleController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scripts/Controllers/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scripts/Controllers/PlayerController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Project/Scripts/Settings/DefaultSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scripts/Settings/DefaultSettings.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Project/Scripts/Settings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scripts/Settings/ProjectSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scripts/Units/Battlefield.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scripts/Units/Battlefield.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,6 +184,7 @@
       <workItem from="1763995599888" duration="4926000" />
       <workItem from="1764001655714" duration="734000" />
       <workItem from="1764021603409" duration="4323000" />
+      <workItem from="1764030741107" duration="1714000" />
     </task>
     <servers />
   </component>
