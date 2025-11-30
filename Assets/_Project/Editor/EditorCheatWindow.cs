@@ -5,6 +5,7 @@ using Necro.World.Board.Cell;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 namespace Necro.Editor.EditorWindow.EditorCheatWindow
 {
@@ -16,11 +17,15 @@ namespace Necro.Editor.EditorWindow.EditorCheatWindow
 
         private Cell _currentCell;
 
+        private const string _uxmlPath = "Assets/_Project/Editor/CheatWindowText.uxml";
+
         [MenuItem("Netologia/Windows/EditorCheatWindow")]
         public static void ShowWindow() => GetWindow<EditorCheatWindow>();
 
         private void OnEnable()
         {
+            VisualizeWindow();
+            
             _editorControls = new EditorControls();
             _playerController = Object.FindObjectOfType<PlayerController>();
             _battleField = Object.FindObjectOfType<Battlefield>();
@@ -69,6 +74,23 @@ namespace Necro.Editor.EditorWindow.EditorCheatWindow
             }
         }
 
+        private void VisualizeWindow()
+        {
+            rootVisualElement.Clear();
+
+            var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(_uxmlPath);
+            
+            if (visualTree != null)
+            {
+                visualTree.CloneTree(rootVisualElement);
+            }
+            else
+            {
+                rootVisualElement.Add(new Label("UXML not found at: " + _uxmlPath));
+            }
+
+        }
+        
         private void EnterPlayMode(PlayModeStateChange obj)
         {
             /*

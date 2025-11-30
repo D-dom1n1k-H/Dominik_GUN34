@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="EditorCheatWindow" style="flex-grow: 1;">
+        <ui:Label tabindex="-1" text="Press [1] to use &quot;NextTurn&quot; chear, that changes current turn to oposite one" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NextTurnCheatInformation" style="color: rgb(205, 231, 19); border-top-width: 10px; border-right-width: 10px; border-bottom-width: 10px; border-left-width: 10px; -unity-font-style: bold; -unity-text-align: upper-center;" />
+        <ui:Label tabindex="-1" text="Press [2] to kill selected Unit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="KillCheatInformation" style="color: rgb(231, 107, 0); background-color: rgba(0, 0, 0, 0); border-top-width: 10px; border-right-width: 10px; border-bottom-width: 10px; border-left-width: 10px; -unity-text-align: upper-center;" />
+    </ui:VisualElement>
+</ui:UXML>
