@@ -37,10 +37,10 @@ namespace Necro.GamePlay.Controllers
         private void Start()
         {
             _avatarImages = _projectSettings.uiSettings.avatarImages;
-            
+
             var randomValue = (byte)UnityEngine.Random.Range(0, _avatarImages.Length);
             whitePlayerAvatarImage.sprite = _avatarImages[randomValue];
-            
+
             randomValue = (byte)UnityEngine.Random.Range(0, _avatarImages.Length);
             blackPlayerAvatarImage.sprite = _avatarImages[randomValue];
         }

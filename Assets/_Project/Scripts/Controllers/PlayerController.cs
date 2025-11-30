@@ -15,7 +15,7 @@ namespace Necro.GamePlay.Controllers.PlayerController
         private Battlefield _battlefield; //injected
         private BattleController _battleController; //injected
         private CurrentTrain _currentTrain; //injected
-        
+
         [SerializeField]
         private Image arrowImage;
 
@@ -52,7 +52,7 @@ namespace Necro.GamePlay.Controllers.PlayerController
 
             Debug.Log("<b>[PlayerController]</b> current train: " + _currentTrain);
         }
-        
+
         private void OnEnable()
         {
             _battlefield.OnMoveRequestEvent += OnUnitMovementStarted;
@@ -68,7 +68,7 @@ namespace Necro.GamePlay.Controllers.PlayerController
         {
             _battlefield.OnMoveRequestEvent -= OnUnitMovementStarted;
             _battleController.OnPlayerMovementConfirmedEvent -= ChangeIsMovementConfirmedField;
-            
+
             foreach (var t in _units)
             {
                 t.OnMoveCompleted -= OnUnitMovementEnded;
@@ -86,7 +86,7 @@ namespace Necro.GamePlay.Controllers.PlayerController
         {
             return _isMovementConfirmed;
         }
-        
+
         public void ChangeCurrentTrainToOpositeOne()
         {
             if (_currentTrain == CurrentTrain.WhiteTeam)
@@ -99,10 +99,10 @@ namespace Necro.GamePlay.Controllers.PlayerController
                 _currentTrain = CurrentTrain.WhiteTeam;
                 arrowImage.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
-            
+
             Debug.Log($"<b>[PlayerController]</b> CurrentTrain was changed to: {_currentTrain}");
         }
-        
+
         #endregion
 
         #region Private Logic
@@ -128,6 +128,7 @@ namespace Necro.GamePlay.Controllers.PlayerController
         {
             _isMovementConfirmed = isConfirmed;
         }
+
         #endregion
 
         [Inject]

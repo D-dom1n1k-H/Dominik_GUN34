@@ -3,6 +3,7 @@ using Necro.Config.DefaultSettings;
 using Necro.Extra.Enums.Team;
 using Necro.Extra.Enums.UnitrType;
 using Necro.GamePlay.Controllers;
+using Necro.World.Battlefield;
 using Necro.World.Board.Cell;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,6 +14,7 @@ namespace Necro.GamePlay.Units
     public class Unit : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         private BattleController _battleController; //injected
+        private Battlefield _battleField; //injected
         private DefaultSettings _projectSettings; //injected
         public UnitType UnitType { get; private set; } = UnitType.Default; // injected
 
@@ -108,6 +110,7 @@ namespace Necro.GamePlay.Units
             UnitType = UnitType.Lady;
             crown.SetActive(true);
         }
+
         public void MoveUnitToCell(Cell targetCell)
         {
             _targetCell = targetCell;
@@ -117,12 +120,15 @@ namespace Necro.GamePlay.Units
         public void DestroyUnit()
         {
             _isMoving = false;
+            _battleField.HidePossibleMoves();
+            _currentCell.ResetSelect();
             Destroy(gameObject);
         }
 
         #endregion
 
         #region Private API
+
         private void Move()
         {
             transform.position = Vector3.MoveTowards(
@@ -143,26 +149,31 @@ namespace Necro.GamePlay.Units
         #endregion
 
         [Inject]
-        private void Construct(BattleController battleController, UnitType unitType, DefaultSettings projectSettings)
+        private void Construct(BattleController battleController, UnitType unitType, DefaultSettings projectSettings,
+            Battlefield battleField)
         {
             _battleController = battleController;
             UnitType = unitType;
             _projectSettings = projectSettings;
+            _battleField = battleField;
         }
 
         private void ValidateDependencies()
         {
             if (whiteCheckerMaterial == null)
-                throw new NullReferenceException("<b>[Unit]</b> whiteCheckerMaterial is null!");
+                throw new NullReferenceException("<b>[Unit]</b> whiteCheckerMaterial null!");
 
             if (blackCheckerMaterial == null)
-                throw new NullReferenceException("<b>[Unit]</b> blackCheckerMaterial is null!");
+                throw new NullReferenceException("<b>[Unit]</b> blackCheckerMaterial null!");
 
             if (_battleController == null)
-                throw new NullReferenceException("<b>[Unit]</b> _battleController is could not be injected!");
+                throw new NullReferenceException("<b>[Unit]</b> _battleController could not be injected!");
 
             if (_projectSettings == null)
-                throw new NullReferenceException("<b>[Unit]</b> _projectSettings is could not be injected!");
+                throw new NullReferenceException("<b>[Unit]</b> _projectSettings could not be injected!");
+
+            if (_battleField == null)
+                throw new NullReferenceException("<b>[Unit]</b> _projectSettings could not be injected!");
         }
         /*
          * This class is used for checkers that are located on Battlefield, that is made with cells

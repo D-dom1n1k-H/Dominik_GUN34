@@ -105,6 +105,11 @@ namespace Necro.World.Battlefield
             }
         }
 
+        public Cell GetCurrentCell()
+        {
+            return _targetCell;
+        }
+
         #endregion
 
         #region Private Logic
@@ -113,6 +118,7 @@ namespace Necro.World.Battlefield
         {
             if (_unitIsMoving) return;
 
+            _targetCell = cell;
             try
             {
                 _passedCells.Add(cell);
