@@ -17,27 +17,20 @@ namespace Necro.Editor.EditorWindow.EditorCheatWindow
 
         private Cell _currentCell;
 
-        private const string _uxmlPath = "Assets/_Project/Editor/CheatWindowText.uxml";
+        private const string UxmlPath = "Assets/_Project/Editor/CheatWindowText.uxml";
 
         [MenuItem("Netologia/Windows/EditorCheatWindow")]
         public static void ShowWindow() => GetWindow<EditorCheatWindow>();
 
         private void OnEnable()
         {
-            VisualizeWindow();
-            
             _editorControls = new EditorControls();
-            _playerController = Object.FindObjectOfType<PlayerController>();
-            _battleField = Object.FindObjectOfType<Battlefield>();
+
+            VisualizeWindow();
 
             ValidateDependencies();
 
-            EditorApplication.playModeStateChanged += EnterPlayMode;
-
-            // InputActionAsset Events
-            _editorControls.Enable();
-            _editorControls.Cheats.NextTurn.performed += CheatsNextTurn_performed;
-            _editorControls.Cheats.Kill.performed += CheatsKill_performed;
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         }
 
         private void OnDisable()
@@ -69,8 +62,15 @@ namespace Necro.Editor.EditorWindow.EditorCheatWindow
             }
             else
             {
-                _currentCell = _battleField.GetCurrentCell();
-                _currentCell.GetCurrentUnit().DestroyUnit();
+                try
+                {
+                    _currentCell = _battleField.GetCurrentCell();
+                    _currentCell.GetCurrentUnit().DestroyUnit();
+                }
+                catch
+                {
+                    Debug.LogWarning($"{nameof(EditorCheatWindow)}: Unit is not selected!");
+                }
             }
         }
 
@@ -78,28 +78,37 @@ namespace Necro.Editor.EditorWindow.EditorCheatWindow
         {
             rootVisualElement.Clear();
 
-            var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(_uxmlPath);
-            
+            var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(UxmlPath);
+
             if (visualTree != null)
             {
                 visualTree.CloneTree(rootVisualElement);
             }
             else
             {
-                rootVisualElement.Add(new Label("UXML not found at: " + _uxmlPath));
+                rootVisualElement.Add(new Label("UXML not found at: " + UxmlPath));
             }
+        }
 
+        private void OnPlayModeStateChanged(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.EnteredPlayMode)
+            {
+                _playerController = Object.FindObjectOfType<PlayerController>();
+                _battleField = Object.FindObjectOfType<Battlefield>();
+
+                _editorControls.Enable();
+                _editorControls.Cheats.NextTurn.performed += CheatsNextTurn_performed;
+                _editorControls.Cheats.Kill.performed += CheatsKill_performed;
+            }
+            else if (state == PlayModeStateChange.ExitingPlayMode)
+            {
+                _editorControls.Disable();
+                _editorControls.Cheats.NextTurn.performed -= CheatsNextTurn_performed;
+                _editorControls.Cheats.Kill.performed -= CheatsKill_performed;
+            }
         }
         
-        private void EnterPlayMode(PlayModeStateChange obj)
-        {
-            /*
-             *  _editorControls.Enable();
-             *  _editorControls.Cheats.NextTurn.performed += CheatsNextTurn_performed;
-             * _editorControls.Cheats.Kill.performed += CheatsKill_performed;
-             */
-        }
-
         private void ValidateDependencies()
         {
             if (_playerController == null)
