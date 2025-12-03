@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: ProjectSettings
   m_EditorClassIdentifier: 
   uiSettings:
-    avatarImages:
+    avatarSprites:
     - {fileID: 21300000, guid: 6573395314a192b4bb1cd1160c065438, type: 3}
     - {fileID: 21300000, guid: 9d1fdf1470152754788455228467b50e, type: 3}
     - {fileID: 21300000, guid: 95ffecfa32e2ba544a2880bee4431459, type: 3}
     - {fileID: 21300000, guid: 743a12931cf208346b3113bc47c43aa3, type: 3}
+    arrowSprite: {fileID: 21300000, guid: f7b657010d062fc4cb6e5f0468928b47, type: 3}
   unitSettings:
     speed: 4

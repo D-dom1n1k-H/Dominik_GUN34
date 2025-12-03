@@ -13,7 +13,7 @@ namespace Necro.GamePlay.Units
     public class Unit : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         private BattleController _battleController; //injected
-        private DefaultSettings _projectSettings; //injected
+        private GameSettings _projectSettings; //injected
         public UnitType UnitType { get; private set; } = UnitType.Default; // injected
 
         [SerializeField, Space(10f)]
@@ -108,6 +108,7 @@ namespace Necro.GamePlay.Units
             UnitType = UnitType.Lady;
             crown.SetActive(true);
         }
+
         public void MoveUnitToCell(Cell targetCell)
         {
             _targetCell = targetCell;
@@ -123,6 +124,7 @@ namespace Necro.GamePlay.Units
         #endregion
 
         #region Private API
+
         private void Move()
         {
             transform.position = Vector3.MoveTowards(
@@ -143,7 +145,7 @@ namespace Necro.GamePlay.Units
         #endregion
 
         [Inject]
-        private void Construct(BattleController battleController, UnitType unitType, DefaultSettings projectSettings)
+        private void Construct(BattleController battleController, UnitType unitType, GameSettings projectSettings)
         {
             _battleController = battleController;
             UnitType = unitType;

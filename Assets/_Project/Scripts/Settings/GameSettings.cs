@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Necro.Config.DefaultSettings
 {
@@ -7,7 +8,7 @@ namespace Necro.Config.DefaultSettings
         fileName = "DefaultSettings",
         menuName = "Assets/_Project/Scripts/Settings/DefaultSettings",
         order = 52)]
-    public class DefaultSettings : ScriptableObject
+    public class GameSettings : ScriptableObject
     {
         public GlobalSettings globalSettings;
         public UiSettings uiSettings;
@@ -27,15 +28,16 @@ namespace Necro.Config.DefaultSettings
         [Serializable]
         public struct UnitSettings
         {
-            [Range(0.5f, 10f), Space(10f)]
+            [Range(0.5f, 800f), Space(10f)]
             public float speed;
         }
 
         [Serializable]
         public struct UiSettings
         {
-            [Space(10f), Tooltip("Put in this array images and random is going to chose some images")]
-            public Sprite[] avatarImages;
+            [Space(10f), Tooltip("Put in this array sprites and random is going to chose some of them")]
+            public Sprite[] avatarSprites;
+            public Sprite arrowSprite;
         }
     }
 }

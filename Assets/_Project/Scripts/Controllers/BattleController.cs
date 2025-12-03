@@ -2,6 +2,7 @@ using System;
 using Necro.AutoGen.Controls;
 using Necro.Config.DefaultSettings;
 using Necro.Extra.GameStatus;
+using Necro.Interfaces.WorldSpaceCanvasController;
 using Necro.World.Battlefield;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,7 +16,8 @@ namespace Necro.GamePlay.Controllers
         private Controls _controls; //injected
         private Battlefield _battlefield; //injected
         private GameStatus _gameStatus; //injected
-        private DefaultSettings _projectSettings; // injected
+        private GameSettings _projectSettings; // injected
+        private WorldSpaceCanvasController _worldSpaceCanvasController; //injected
 
         private Sprite[] _avatarImages;
         [SerializeField]
@@ -36,13 +38,8 @@ namespace Necro.GamePlay.Controllers
 
         private void Start()
         {
-            _avatarImages = _projectSettings.uiSettings.avatarImages;
-            
-            var randomValue = (byte)UnityEngine.Random.Range(0, _avatarImages.Length);
-            whitePlayerAvatarImage.sprite = _avatarImages[randomValue];
-            
-            randomValue = (byte)UnityEngine.Random.Range(0, _avatarImages.Length);
-            blackPlayerAvatarImage.sprite = _avatarImages[randomValue];
+            whitePlayerAvatarImage.sprite = _worldSpaceCanvasController.GetRandomAvatarSprite();
+            blackPlayerAvatarImage.sprite = _worldSpaceCanvasController.GetRandomAvatarSprite();
         }
 
         private void OnEnable()
@@ -177,12 +174,13 @@ namespace Necro.GamePlay.Controllers
 
         [Inject]
         private void Construct(Controls controls, GameStatus gameStatus, Battlefield battlefield,
-            DefaultSettings projectSettings)
+            GameSettings projectSettings, WorldSpaceCanvasController worldSpaceCanvasController)
         {
             _controls = controls;
             _gameStatus = gameStatus;
             _battlefield = battlefield;
             _projectSettings = projectSettings;
+            _worldSpaceCanvasController = worldSpaceCanvasController;
         }
 
         private void ValidateDependencies()
@@ -201,6 +199,9 @@ namespace Necro.GamePlay.Controllers
 
             if (blackPlayerAvatarImage == null)
                 throw new NullReferenceException("<b>[BattleController]</b> blackPlayerAvatarImage is null!");
+
+            if (_worldSpaceCanvasController == null)
+                throw new NullReferenceException("<b>[BattleController]</b> _worldSpaceCanvasController could not be injected!");
         }
 
         /*

@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System.Text;
+﻿using System.Text;
 using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 #if UNITY_EDITOR
-using UnityEditor;
 using System.Text.RegularExpressions;
+using UnityEditor;
 #endif
 
 // A UI element to show information about a debug entry

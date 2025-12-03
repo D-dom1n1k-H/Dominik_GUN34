@@ -8,6 +8,7 @@ using Necro.Extra.Enums.UnitrType;
 using Necro.GamePlay.Controllers;
 using Necro.GamePlay.Controllers.PlayerController;
 using Necro.GamePlay.Units;
+using Necro.Interfaces.ConfirmMovementTextController;
 using Necro.World.Board.Cell;
 using UnityEngine;
 using Zenject;
@@ -19,11 +20,10 @@ namespace Necro.World.Battlefield
         private BattleController _battleController; //injected
         private CellPalletSettings _cellPalletSettings; //injected
         private PlayerController _playerController; //injected
+        private ConfirmMovementTextController _confirmMovementTextController; //injected
 
         [SerializeField]
         private BorderCells borderCells;
-        [SerializeField]
-        private GameObject confirmMovementText;
 
         // for movement
         private Cell _whiteFrCell;
@@ -113,14 +113,17 @@ namespace Necro.World.Battlefield
         {
             if (_unitIsMoving) return;
 
-            try
+            _passedCells.Add(cell);
+
+            if (_passedCells.Count >= 2)
             {
-                _passedCells.Add(cell);
                 _pastCell = _passedCells[^2]; // ^2 == _passedCells.Count - 2
             }
-            catch
+            else
             {
+                _pastCell = null;
             }
+
 
             var cellsMeshRender = cell.GetComponentInChildren<MeshRenderer>();
 
@@ -146,7 +149,7 @@ namespace Necro.World.Battlefield
                 }
             }
             else if (cell.SelectIsActive &&
-                     cell.Select.material.color ==
+                     cell.GetSelect.material.color ==
                      _cellPalletSettings.SelectCellMaterial.color) // без .color не работало сравнение (==)
             {
                 cell.ResetSelect();
@@ -154,7 +157,7 @@ namespace Necro.World.Battlefield
             }
 
             else if (cell.SelectIsActive &&
-                     cell.Select.material.color ==
+                     cell.GetSelect.material.color ==
                      _cellPalletSettings.MoveCellMaterial.color) // for movement
             {
                 if (cell == null) Debug.LogWarning("<b>[Battlefield]</b> cell is null!");
@@ -231,7 +234,7 @@ namespace Necro.World.Battlefield
 
         private void OnUnitMoveCompleted(Unit unit)
         {
-            if (unit.GetCurrentCell().Select.material.color == _cellPalletSettings.MoveCellMaterial.color)
+            if (unit.GetCurrentCell().GetSelect.material.color == _cellPalletSettings.MoveCellMaterial.color)
             {
                 _battleController.SetGameStatusModeToMove(gameObject);
 
@@ -257,7 +260,7 @@ namespace Necro.World.Battlefield
                     }
                 }
             }
-            else if (unit.GetCurrentCell().Select.material.color == _cellPalletSettings.AttackCellMaterial.color)
+            else if (unit.GetCurrentCell().GetSelect.material.color == _cellPalletSettings.AttackCellMaterial.color)
             {
                 _battleController.SetGameStatusModeToAttack(gameObject);
             }
@@ -439,7 +442,7 @@ namespace Necro.World.Battlefield
         {
             if (_pendingTargetCell != null && _pendingFromCell != null && isConfirmed == true)
             {
-                confirmMovementText.SetActive(false);
+                _confirmMovementTextController.HideConfirmMovementText();
                 OnMoveRequestEvent?.Invoke(_pendingFromCell, _pendingTargetCell);
                 _pendingTargetCell = null;
                 _pendingFromCell = null;
@@ -458,9 +461,9 @@ namespace Necro.World.Battlefield
 
         private void HandleMoveToCell(Cell targetCell)
         {
-            if (_pastCell.Select.material.color == _cellPalletSettings.SelectCellMaterial.color)
+            if (_pastCell.GetSelect.material.color == _cellPalletSettings.SelectCellMaterial.color)
             {
-                confirmMovementText.SetActive(true);
+                _confirmMovementTextController.ShowConfirmMovementText();
                 _pendingFromCell = _pastCell;
                 _pendingTargetCell = targetCell;
                 _battleController.SetGameStatusModeToConfirmMove(gameObject);
@@ -471,11 +474,12 @@ namespace Necro.World.Battlefield
 
         [Inject]
         private void Construct(CellPalletSettings cellPalletSettings, BattleController battleController,
-            PlayerController playerController)
+            PlayerController playerController, ConfirmMovementTextController confirmMovementTextController)
         {
             _cellPalletSettings = cellPalletSettings;
             _battleController = battleController;
             _playerController = playerController;
+            _confirmMovementTextController = confirmMovementTextController;
         }
 
         private void ValidateDependencies()
@@ -489,8 +493,9 @@ namespace Necro.World.Battlefield
             if (_playerController == null)
                 throw new NullReferenceException("<b>[Battlefield]</b> _playerController could not be injected!");
 
-            if (confirmMovementText == null)
-                throw new NullReferenceException("<b>[Battlefield]</b> _confirmMovementText is null!");
+            if (_confirmMovementTextController == null)
+                throw new NullReferenceException(
+                    "<b>[Battlefield]</b> _confirmMovementTextController could not be injected!");
         }
         /*
          * Battlefields task is mark Cells and send event to PlayerController if player is going to move checker

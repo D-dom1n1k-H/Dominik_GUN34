@@ -14,7 +14,7 @@ namespace Necro.World.Board.Cell
     public class Cell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         private BattleController _battleController; // injected
-        private DefaultSettings _projectSettings; //inject
+        private GameSettings _projectSettings; //inject
         private CellPalletSettings _cellPalletSettings; // injected
 
         [SerializeField, Space(10f)]
@@ -28,7 +28,6 @@ namespace Necro.World.Board.Cell
 
         private Unit _currentUnit;
 
-        public MeshRenderer Select => select;
         private MeshRenderer _meshRenderer;
 
         public bool SelectIsActive { get; private set; } = false;
@@ -104,6 +103,7 @@ namespace Necro.World.Board.Cell
 
         public Unit GetCurrentUnit() => _currentUnit;
         public void SetCurrentUnit(Unit unit) => _currentUnit = unit;
+        public MeshRenderer GetSelect => select;
 
         public void SetSelect(Material material)
         {
@@ -196,25 +196,25 @@ namespace Necro.World.Board.Cell
 
         [Inject]
         private void Construct(BattleController battleController, CellPalletSettings cellPalletSettings,
-            DefaultSettings defaultSettings)
+            GameSettings gameSettings)
         {
             _battleController = battleController;
             _cellPalletSettings = cellPalletSettings;
-            _projectSettings = defaultSettings;
+            _projectSettings = gameSettings;
         }
 
         private void ValidateDependencies()
         {
             if (focus == null)
-                throw new NullReferenceException("<b>[Cell]</b> focus is null!");
+                throw new NullReferenceException("<b>[Cell]</b> focus null!");
             if (select == null)
-                throw new NullReferenceException("<b>[Cell]</b> select is null!");
+                throw new NullReferenceException("<b>[Cell]</b> select null!");
             if (_battleController == null)
-                throw new NullReferenceException("<b>[Cell]</b> _battleController is could not be injected!");
+                throw new NullReferenceException("<b>[Cell]</b> _battleController could not be injected!");
             if (_cellPalletSettings == null)
-                throw new NullReferenceException("<b>[Cell]</b> _cellPalletSettings is could not be injected!");
+                throw new NullReferenceException("<b>[Cell]</b> _cellPalletSettings could not be injected!");
             if (_projectSettings == null)
-                throw new NullReferenceException("[Cell]</b> _projectSettings is could not be injected!");
+                throw new NullReferenceException("[Cell]</b> _projectSettings could not be injected!");
         }
 
         /*

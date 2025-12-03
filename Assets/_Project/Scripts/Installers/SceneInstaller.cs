@@ -8,6 +8,8 @@ using Necro.Extra.GameStatus;
 using Necro.GamePlay.Controllers;
 using Necro.GamePlay.Controllers.PlayerController;
 using Necro.GamePlay.Units;
+using Necro.Interfaces.ConfirmMovementTextController;
+using Necro.Interfaces.WorldSpaceCanvasController;
 using Necro.World.Battlefield;
 using UnityEngine;
 using Zenject;
@@ -22,7 +24,7 @@ namespace Necro.GamePlay.Installers
         private CurrentTrain _currentTrain;
 
         [SerializeField]
-        private DefaultSettings defaultSettings;
+        private GameSettings gameSettings;
 
         [SerializeField]
         private CellPalletSettings cellPalletSettings;
@@ -32,6 +34,12 @@ namespace Necro.GamePlay.Installers
 
         [SerializeField]
         private PlayerController playerController;
+        
+        [SerializeField]
+        private ConfirmMovementTextController confirmMovementTextController;
+        
+        [SerializeField]
+        private WorldSpaceCanvasController worldSpaceCanvasController;
 
         [SerializeField]
         private Battlefield battlefield;
@@ -49,11 +57,13 @@ namespace Necro.GamePlay.Installers
             Container.Bind<GameStatus>().FromInstance(_gameStatus).WhenInjectedInto<BattleController>();
             Container.Bind<UnitType>().FromInstance(_unitType).WhenInjectedInto<Unit>();
 
-            Container.Bind<DefaultSettings>().FromInstance(defaultSettings).AsSingle();
+            Container.Bind<GameSettings>().FromInstance(gameSettings).AsSingle();
             Container.Bind<CellPalletSettings>().FromInstance(cellPalletSettings).AsSingle();
             Container.Bind<BattleController>().FromInstance(battleController).AsSingle();
             Container.Bind<PlayerController>().FromInstance(playerController).AsSingle();
             Container.Bind<Battlefield>().FromInstance(battlefield).AsSingle();
+            Container.Bind<ConfirmMovementTextController>().FromInstance(confirmMovementTextController).AsSingle();
+            Container.Bind<WorldSpaceCanvasController>().FromInstance(worldSpaceCanvasController).AsSingle();
         }
 
         private void ValidateDependencies()
@@ -69,8 +79,15 @@ namespace Necro.GamePlay.Installers
 
             if (playerController == null)
                 throw new NullReferenceException("<b>[SceneInstaller]</b> playerController is null!");
-            if (defaultSettings == null)
+            
+            if (gameSettings == null)
                 throw new NullReferenceException("<b>[SceneInstaller]</b> defaultSettings is null!");
+            
+            if (confirmMovementTextController == null)
+                throw new NullReferenceException("<b>[SceneInstaller]</b> confirmMovementTextController is null!");
+
+            if (worldSpaceCanvasController == null)
+                throw new NullReferenceException("<b>[SceneInstaller]</b>  worldSpaceCanvasController is null!");
         }
     }
 }

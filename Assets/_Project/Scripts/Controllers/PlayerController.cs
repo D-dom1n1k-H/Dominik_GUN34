@@ -1,6 +1,7 @@
 using System;
 using Necro.Extra.Enums.CurrentTrain;
 using Necro.GamePlay.Units;
+using Necro.Interfaces.WorldSpaceCanvasController;
 using Necro.World.Battlefield;
 using Necro.World.Board.Cell;
 using UnityEngine;
@@ -14,10 +15,8 @@ namespace Necro.GamePlay.Controllers.PlayerController
     {
         private Battlefield _battlefield; //injected
         private BattleController _battleController; //injected
+        private WorldSpaceCanvasController _worldSpaceCanvasController; //injected
         private CurrentTrain _currentTrain; //injected
-        
-        [SerializeField]
-        private Image arrowImage;
 
         // for movement
         private Cell _currentCell;
@@ -42,17 +41,17 @@ namespace Necro.GamePlay.Controllers.PlayerController
             if (randomValue == 0)
             {
                 _currentTrain = CurrentTrain.WhiteTeam;
-                arrowImage.transform.rotation = Quaternion.Euler(0, 0, 0);
+                _worldSpaceCanvasController.TurnArrowImageToOpositeSide();
             }
             else if (randomValue == 1)
             {
                 _currentTrain = CurrentTrain.BlackTeam;
-                arrowImage.transform.rotation = Quaternion.Euler(0, 180, 0);
+                _worldSpaceCanvasController.TurnArrowImageToOpositeSide();
             }
 
             Debug.Log("<b>[PlayerController]</b> current train: " + _currentTrain);
         }
-        
+
         private void OnEnable()
         {
             _battlefield.OnMoveRequestEvent += OnUnitMovementStarted;
@@ -68,7 +67,7 @@ namespace Necro.GamePlay.Controllers.PlayerController
         {
             _battlefield.OnMoveRequestEvent -= OnUnitMovementStarted;
             _battleController.OnPlayerMovementConfirmedEvent -= ChangeIsMovementConfirmedField;
-            
+
             foreach (var t in _units)
             {
                 t.OnMoveCompleted -= OnUnitMovementEnded;
@@ -86,23 +85,23 @@ namespace Necro.GamePlay.Controllers.PlayerController
         {
             return _isMovementConfirmed;
         }
-        
+
         public void ChangeCurrentTrainToOpositeOne()
         {
             if (_currentTrain == CurrentTrain.WhiteTeam)
             {
                 _currentTrain = CurrentTrain.BlackTeam;
-                arrowImage.transform.rotation = Quaternion.Euler(0, 180, 0);
+                _worldSpaceCanvasController.TurnArrowImageToOpositeSide();
             }
             else if (_currentTrain == CurrentTrain.BlackTeam)
             {
                 _currentTrain = CurrentTrain.WhiteTeam;
-                arrowImage.transform.rotation = Quaternion.Euler(0, 0, 0);
+                _worldSpaceCanvasController.TurnArrowImageToOpositeSide();
             }
-            
+
             Debug.Log($"<b>[PlayerController]</b> CurrentTrain was changed to: {_currentTrain}");
         }
-        
+
         #endregion
 
         #region Private Logic
@@ -128,13 +127,16 @@ namespace Necro.GamePlay.Controllers.PlayerController
         {
             _isMovementConfirmed = isConfirmed;
         }
+
         #endregion
 
         [Inject]
-        private void Construct(Battlefield battlefield, BattleController battleController, CurrentTrain currentTrain)
+        private void Construct(Battlefield battlefield, BattleController battleController,
+            WorldSpaceCanvasController worldSpaceCanvasController, CurrentTrain currentTrain)
         {
             _battlefield = battlefield;
             _battleController = battleController;
+            _worldSpaceCanvasController = worldSpaceCanvasController;
             _currentTrain = currentTrain;
         }
 
@@ -146,11 +148,11 @@ namespace Necro.GamePlay.Controllers.PlayerController
             if (_battleController == null)
                 throw new NullReferenceException("<b>[PlayerController]</b> _battlefield could not be injected!");
 
-            if (arrowImage == null)
-                throw new NullReferenceException("<b>[PlayerController]</b> arrowImage is null!");
+            if (_worldSpaceCanvasController == null)
+                throw new NullReferenceException("<b>[PlayerController]</b> _worldSpaceCanvasController could not be injected!");
         }
         /*
-         * PlayerController is used to move checkers and block players input while is doing that
+         * PlayerController is used to move checkers and block players input while player is doing that
          */
     }
 }
