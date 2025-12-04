@@ -30,6 +30,9 @@ namespace Necro.GamePlay.Installers
         private CellPalletSettings cellPalletSettings;
 
         [SerializeField]
+        private SceneController sceneController;
+        
+        [SerializeField]
         private BattleController battleController;
 
         [SerializeField]
@@ -64,6 +67,7 @@ namespace Necro.GamePlay.Installers
             Container.Bind<Battlefield>().FromInstance(battlefield).AsSingle();
             Container.Bind<ConfirmMovementTextController>().FromInstance(confirmMovementTextController).AsSingle();
             Container.Bind<WorldSpaceCanvasController>().FromInstance(worldSpaceCanvasController).AsSingle();
+            Container.Bind<SceneController>().FromInstance(sceneController).AsSingle();
         }
 
         private void ValidateDependencies()
@@ -85,6 +89,9 @@ namespace Necro.GamePlay.Installers
 
             if (confirmMovementTextController == null)
                 throw new NullReferenceException("<b>[SceneInstaller]</b> confirmMovementTextController is null!");
+
+            if (worldSpaceCanvasController == null)
+                throw new NullReferenceException("<b>[SceneInstaller]</b>  worldSpaceCanvasController is null!");
 
             if (worldSpaceCanvasController == null)
                 throw new NullReferenceException("<b>[SceneInstaller]</b>  worldSpaceCanvasController is null!");
