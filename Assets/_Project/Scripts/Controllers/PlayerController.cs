@@ -130,6 +130,8 @@ namespace Necro.GamePlay.Controllers.PlayerController
 
         #endregion
 
+        #region Initialization
+
         [Inject]
         private void Construct(Battlefield battlefield, BattleController battleController,
             WorldSpaceCanvasController worldSpaceCanvasController, CurrentTrain currentTrain)
@@ -149,8 +151,12 @@ namespace Necro.GamePlay.Controllers.PlayerController
                 throw new NullReferenceException("<b>[PlayerController]</b> _battlefield could not be injected!");
 
             if (_worldSpaceCanvasController == null)
-                throw new NullReferenceException("<b>[PlayerController]</b> _worldSpaceCanvasController could not be injected!");
+                throw new NullReferenceException(
+                    "<b>[PlayerController]</b> _worldSpaceCanvasController could not be injected!");
         }
+
+        #endregion
+
         /*
          * PlayerController is used to move checkers and block players input while player is doing that
          */

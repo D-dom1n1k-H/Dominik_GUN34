@@ -1,18 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Necro.World.Board.Cell;
 
-public class IGameplayCommand : MonoBehaviour
+namespace Necro.Commands.IGameplayCommand
 {
-    // Start is called before the first frame update
-    void Start()
+    public interface IGameplayCommand
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void Interact(Cell cell);
     }
 }

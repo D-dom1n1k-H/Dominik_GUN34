@@ -13,13 +13,11 @@ namespace Necro.GamePlay.Units
     public class Unit : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         private BattleController _battleController; //injected
-        private GameSettings _projectSettings; //injected
+        private GameSettings _gameSettings; //injected
         public UnitType UnitType { get; private set; } = UnitType.Default; // injected
 
-        [SerializeField, Space(10f)]
-        private Material whiteCheckerMaterial;
-        [SerializeField]
-        private Material blackCheckerMaterial;
+        private Material _whiteUnitMaterial;
+        private Material _blackUnitMaterial;
         [SerializeField, Space(10f)]
         private GameObject crown;
         [SerializeField]
@@ -45,27 +43,25 @@ namespace Necro.GamePlay.Units
         {
             _meshRenderer = GetComponent<MeshRenderer>();
 
+            SetupFromSettings();
+
             ValidateDependencies();
         }
 
         private void Start()
         {
-            if (_meshRenderer.material.name.StartsWith(whiteCheckerMaterial.name))
+            if (this.CompareTag("WhiteUnit"))
             {
+                _meshRenderer.material = _whiteUnitMaterial;
                 Team = Team.White;
             }
-            else if (_meshRenderer.material.name.StartsWith(blackCheckerMaterial.name))
+            else if (CompareTag("BlackUnit"))
             {
+                _meshRenderer.material = _blackUnitMaterial;
                 Team = Team.Black;
             }
-            else
-            {
-                Debug.LogError($"<b>[Unit]</b> unit has incorrect material: {_meshRenderer.material.name}");
-            }
 
-            movementSpeed = _projectSettings.unitSettings.speed;
-
-            crown.SetActive(false);
+            crown.SetActive(true);
         }
 
         private void Update()
@@ -144,28 +140,45 @@ namespace Necro.GamePlay.Units
 
         #endregion
 
+        #region Initialization
+
+        private void SetupFromSettings()
+        {
+            _whiteUnitMaterial = _gameSettings.unitSettings.whiteUnitMaterial;
+            _blackUnitMaterial = _gameSettings.unitSettings.blackUnitMaterial;
+
+            crown.GetComponent<MeshFilter>().mesh = _gameSettings.unitSettings.crownMesh;
+            crown.GetComponent<MeshCollider>().sharedMesh = _gameSettings.unitSettings.crownMesh;
+            crown.GetComponent<Renderer>().material = _gameSettings.unitSettings.crownMaterial;
+
+            movementSpeed = _gameSettings.unitSettings.speed;
+        }
+
         [Inject]
         private void Construct(BattleController battleController, UnitType unitType, GameSettings projectSettings)
         {
             _battleController = battleController;
             UnitType = unitType;
-            _projectSettings = projectSettings;
+            _gameSettings = projectSettings;
         }
 
         private void ValidateDependencies()
         {
-            if (whiteCheckerMaterial == null)
+            if (_whiteUnitMaterial == null)
                 throw new NullReferenceException("<b>[Unit]</b> whiteCheckerMaterial is null!");
 
-            if (blackCheckerMaterial == null)
+            if (_blackUnitMaterial == null)
                 throw new NullReferenceException("<b>[Unit]</b> blackCheckerMaterial is null!");
 
             if (_battleController == null)
                 throw new NullReferenceException("<b>[Unit]</b> _battleController is could not be injected!");
 
-            if (_projectSettings == null)
+            if (_gameSettings == null)
                 throw new NullReferenceException("<b>[Unit]</b> _projectSettings is could not be injected!");
         }
+
+        #endregion
+
         /*
          * This class is used for checkers that are located on Battlefield, that is made with cells
          */

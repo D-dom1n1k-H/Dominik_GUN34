@@ -20,11 +20,8 @@ namespace Necro.Interfaces.WorldSpaceCanvasController
 
         private void Awake()
         {
-            _arrowSprite = _gameSettings.uiSettings.arrowSprite;
-            _avatarSprites = _gameSettings.uiSettings.avatarSprites;
-
-            _availableSprites = new List<Sprite>(_avatarSprites);
-
+            SetupFromSettings();
+            
             for (int i = 0; i < _availableSprites.Count; i++)
             {
                 var rnd = UnityEngine.Random.Range(i, _availableSprites.Count);
@@ -64,6 +61,16 @@ namespace Necro.Interfaces.WorldSpaceCanvasController
 
         #endregion
 
+        private void SetupFromSettings()
+        {
+            _arrowSprite = _gameSettings.uiSettings.arrowSprite; 
+            arrowImage.sprite = _arrowSprite;
+            
+            _avatarSprites = _gameSettings.uiSettings.avatarSprites;
+
+            _availableSprites = new List<Sprite>(_avatarSprites);
+        }
+        
         [Inject]
         private void Construct(GameSettings gameSettings)
         {

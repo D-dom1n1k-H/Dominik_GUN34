@@ -25,6 +25,13 @@ namespace Necro.World.Battlefield
         [SerializeField]
         private BorderCells borderCells;
 
+        [Serializable]
+        private struct BorderCells
+        {
+            public Cell[] whiteTeamCells;
+            public Cell[] blackTeamCells;
+        }
+
         // for movement
         private Cell _whiteFrCell;
         private Cell _whiteBrCell;
@@ -472,6 +479,9 @@ namespace Necro.World.Battlefield
 
         #endregion
 
+
+        #region Initialization
+
         [Inject]
         private void Construct(CellPalletSettings cellPalletSettings, BattleController battleController,
             PlayerController playerController, ConfirmMovementTextController confirmMovementTextController)
@@ -497,15 +507,11 @@ namespace Necro.World.Battlefield
                 throw new NullReferenceException(
                     "<b>[Battlefield]</b> _confirmMovementTextController could not be injected!");
         }
+
         /*
          * Battlefields task is mark Cells and send event to PlayerController if player is going to move checker
          */
 
-        [Serializable]
-        private struct BorderCells
-        {
-            public Cell[] whiteTeamCells;
-            public Cell[] blackTeamCells;
-        }
+        #endregion
     }
 }

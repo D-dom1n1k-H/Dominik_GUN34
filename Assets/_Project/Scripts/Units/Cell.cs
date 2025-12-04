@@ -14,17 +14,15 @@ namespace Necro.World.Board.Cell
     public class Cell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         private BattleController _battleController; // injected
-        private GameSettings _projectSettings; //inject
+        private GameSettings _gameSettings; //inject
         private CellPalletSettings _cellPalletSettings; // injected
 
         [SerializeField, Space(10f)]
         private MeshRenderer focus;
         [SerializeField]
         private MeshRenderer select;
-        [SerializeField]
-        private Material whiteCellMaterial;
-        [SerializeField]
-        private Material blackCellMaterial;
+        private Material _whiteCellMaterial;
+        private Material _blackCellMaterial;
 
         private Unit _currentUnit;
 
@@ -40,6 +38,9 @@ namespace Necro.World.Board.Cell
         private void Awake()
         {
             _meshRenderer = gameObject.GetComponent<MeshRenderer>();
+
+            SetupFromSettings();
+
             ValidateDependencies();
         }
 
@@ -48,6 +49,15 @@ namespace Necro.World.Board.Cell
             FindAndFillNearestCells();
             focus.enabled = false;
             select.enabled = false;
+
+            if (this.CompareTag("WhiteCell"))
+            {
+                _meshRenderer.material = _whiteCellMaterial;
+            }
+            else if (this.CompareTag("BlackCell"))
+            {
+                _meshRenderer.material = _blackCellMaterial;
+            }
         }
 
         public void OnPointerEnter(PointerEventData eventData) => OnCellEntered(this);
@@ -66,7 +76,7 @@ namespace Necro.World.Board.Cell
                 UnsubscribeFromUnit(_currentUnit);
                 _currentUnit = null;
             }
-            else if (_meshRenderer.material.color == blackCellMaterial.color)
+            else if (this.CompareTag("BlackCell"))
             {
                 _currentUnit = unit;
                 SubscribeToUnit(_currentUnit);
@@ -194,13 +204,21 @@ namespace Necro.World.Board.Cell
 
         #endregion
 
+        #region Initialization
+
+        private void SetupFromSettings()
+        {
+            _whiteCellMaterial = _gameSettings.cellSettings.whiteCellMaterial;
+            _blackCellMaterial = _gameSettings.cellSettings.blackCellMaterial;
+        }
+
         [Inject]
         private void Construct(BattleController battleController, CellPalletSettings cellPalletSettings,
             GameSettings gameSettings)
         {
             _battleController = battleController;
             _cellPalletSettings = cellPalletSettings;
-            _projectSettings = gameSettings;
+            _gameSettings = gameSettings;
         }
 
         private void ValidateDependencies()
@@ -213,9 +231,11 @@ namespace Necro.World.Board.Cell
                 throw new NullReferenceException("<b>[Cell]</b> _battleController could not be injected!");
             if (_cellPalletSettings == null)
                 throw new NullReferenceException("<b>[Cell]</b> _cellPalletSettings could not be injected!");
-            if (_projectSettings == null)
+            if (_gameSettings == null)
                 throw new NullReferenceException("[Cell]</b> _projectSettings could not be injected!");
         }
+
+        #endregion
 
         /*
          * Class Cell is used to control cells on Battlefield

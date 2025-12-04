@@ -16,7 +16,7 @@ namespace Necro.GamePlay.Controllers
         private Controls _controls; //injected
         private Battlefield _battlefield; //injected
         private GameStatus _gameStatus; //injected
-        private GameSettings _projectSettings; // injected
+
         private WorldSpaceCanvasController _worldSpaceCanvasController; //injected
 
         private Sprite[] _avatarImages;
@@ -172,14 +172,15 @@ namespace Necro.GamePlay.Controllers
 
         #endregion
 
+        #region Initialization
+
         [Inject]
         private void Construct(Controls controls, GameStatus gameStatus, Battlefield battlefield,
-            GameSettings projectSettings, WorldSpaceCanvasController worldSpaceCanvasController)
+            WorldSpaceCanvasController worldSpaceCanvasController)
         {
             _controls = controls;
             _gameStatus = gameStatus;
             _battlefield = battlefield;
-            _projectSettings = projectSettings;
             _worldSpaceCanvasController = worldSpaceCanvasController;
         }
 
@@ -191,9 +192,6 @@ namespace Necro.GamePlay.Controllers
             if (_battlefield == null)
                 throw new NullReferenceException("<b>[BattleController]</b> _battlefield could not be injected!");
 
-            if (_projectSettings == null)
-                throw new NullReferenceException("<b>[BattleController]</b> _projectSettings could not be injected!");
-
             if (whitePlayerAvatarImage == null)
                 throw new NullReferenceException("<b>[BattleController]</b> whitePlayerAvatarImage is null!");
 
@@ -201,8 +199,11 @@ namespace Necro.GamePlay.Controllers
                 throw new NullReferenceException("<b>[BattleController]</b> blackPlayerAvatarImage is null!");
 
             if (_worldSpaceCanvasController == null)
-                throw new NullReferenceException("<b>[BattleController]</b> _worldSpaceCanvasController could not be injected!");
+                throw new NullReferenceException(
+                    "<b>[BattleController]</b> _worldSpaceCanvasController could not be injected!");
         }
+
+        #endregion
 
         /*
          * Class BattleController should be used to handle the players input, and it gives API to change enum GameStatus

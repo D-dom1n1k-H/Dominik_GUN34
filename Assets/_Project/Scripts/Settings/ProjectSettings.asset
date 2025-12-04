@@ -19,5 +19,12 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 95ffecfa32e2ba544a2880bee4431459, type: 3}
     - {fileID: 21300000, guid: 743a12931cf208346b3113bc47c43aa3, type: 3}
     arrowSprite: {fileID: 21300000, guid: f7b657010d062fc4cb6e5f0468928b47, type: 3}
+  cellSettings:
+    whiteCellMaterial: {fileID: 2100000, guid: 66a6eca8b5ca25a4aa2ee28dfd20d31b, type: 2}
+    blackCellMaterial: {fileID: 2100000, guid: bebd7b888fdf4ee4ba418296854c4553, type: 2}
   unitSettings:
+    whiteUnitMaterial: {fileID: 2100000, guid: 91fe80227e3841e4c9c13d3f4017da6d, type: 2}
+    blackUnitMaterial: {fileID: 2100000, guid: 44c6f52218a0b3a42833fb2ed58b96e6, type: 2}
+    crownMesh: {fileID: -8918359706675279303, guid: c3452ad56a2244546a24c25523dffb91, type: 3}
+    crownMaterial: {fileID: 8826206314301804856, guid: c3452ad56a2244546a24c25523dffb91, type: 3}
     speed: 4

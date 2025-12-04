@@ -34,10 +34,10 @@ namespace Necro.GamePlay.Installers
 
         [SerializeField]
         private PlayerController playerController;
-        
+
         [SerializeField]
         private ConfirmMovementTextController confirmMovementTextController;
-        
+
         [SerializeField]
         private WorldSpaceCanvasController worldSpaceCanvasController;
 
@@ -79,10 +79,10 @@ namespace Necro.GamePlay.Installers
 
             if (playerController == null)
                 throw new NullReferenceException("<b>[SceneInstaller]</b> playerController is null!");
-            
+
             if (gameSettings == null)
                 throw new NullReferenceException("<b>[SceneInstaller]</b> defaultSettings is null!");
-            
+
             if (confirmMovementTextController == null)
                 throw new NullReferenceException("<b>[SceneInstaller]</b> confirmMovementTextController is null!");
 
