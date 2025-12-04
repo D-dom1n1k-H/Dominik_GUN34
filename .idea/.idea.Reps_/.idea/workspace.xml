@@ -5,10 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="046f749b-7f49-406f-8c95-90afc496fca3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Assets/_External/Plugins/Zenject/Source/Binding/BindingUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_External/Plugins/Zenject/Source/Binding/BindingUtil.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_GlobalSettings/Rendering/URP-Asset.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_GlobalSettings/Rendering/URP-Asset.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Project/Scenes/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scenes/GameScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scenes/MainScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scripts/Controllers/BattleController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scripts/Controllers/BattleController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scripts/Controllers/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scripts/Controllers/PlayerController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Project/Scripts/Installers/SceneInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scripts/Installers/SceneInstaller.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scripts/Interfaces/RestartTextController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scripts/Interfaces/RestartTextController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scripts/Interfaces/WorldSapceCanvasController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scripts/Interfaces/WorldSapceCanvasController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scripts/Settings/GameSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scripts/Settings/GameSettings.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,6 +195,7 @@
       <workItem from="1764777682982" duration="3804000" />
       <workItem from="1764861537419" duration="2121000" />
       <workItem from="1764863830080" duration="2657000" />
+      <workItem from="1764866628618" duration="1233000" />
     </task>
     <servers />
   </component>

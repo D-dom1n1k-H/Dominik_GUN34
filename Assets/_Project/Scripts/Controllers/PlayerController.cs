@@ -145,14 +145,14 @@ namespace Necro.GamePlay.Controllers.PlayerController
         private void ValidateDependencies()
         {
             if (_battlefield == null)
-                throw new NullReferenceException("<b>[PlayerController]</b> _battlefield could not be injected!");
+                throw new MissingReferenceException("[PlayerController] _battlefield was not assigned or injected.");
 
             if (_battleController == null)
-                throw new NullReferenceException("<b>[PlayerController]</b> _battlefield could not be injected!");
+                throw new MissingReferenceException("[PlayerController] _battleController was not assigned or injected.");
 
             if (_worldSpaceCanvasController == null)
-                throw new NullReferenceException(
-                    "<b>[PlayerController]</b> _worldSpaceCanvasController could not be injected!");
+                throw new MissingReferenceException("[PlayerController] _worldSpaceCanvasController was not assigned or injected.");
+
         }
 
         #endregion

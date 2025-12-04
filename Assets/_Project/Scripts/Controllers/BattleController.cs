@@ -187,20 +187,19 @@ namespace Necro.GamePlay.Controllers
         private void ValidateDependencies()
         {
             if (_controls == null)
-                throw new NullReferenceException("<b>[BattleController]</b> _controls could not be injected!");
+                throw new MissingReferenceException("[BattleController] _controls was not assigned or injected.");
 
             if (_battlefield == null)
-                throw new NullReferenceException("<b>[BattleController]</b> _battlefield could not be injected!");
+                throw new MissingReferenceException("[BattleController] _battlefield was not assigned or injected.");
 
             if (whitePlayerAvatarImage == null)
-                throw new NullReferenceException("<b>[BattleController]</b> whitePlayerAvatarImage is null!");
+                throw new MissingReferenceException("[BattleController] whitePlayerAvatarImage was not assigned in the Inspector.");
 
             if (blackPlayerAvatarImage == null)
-                throw new NullReferenceException("<b>[BattleController]</b> blackPlayerAvatarImage is null!");
+                throw new MissingReferenceException("[BattleController] blackPlayerAvatarImage was not assigned in the Inspector.");
 
             if (_worldSpaceCanvasController == null)
-                throw new NullReferenceException(
-                    "<b>[BattleController]</b> _worldSpaceCanvasController could not be injected!");
+                throw new MissingReferenceException("[BattleController] _worldSpaceCanvasController was not assigned or injected.");
         }
 
         #endregion

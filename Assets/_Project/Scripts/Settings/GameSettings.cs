@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Necro.Config.DefaultSettings
 {
@@ -25,6 +24,7 @@ namespace Necro.Config.DefaultSettings
         {
             [Space(6f), Tooltip("White cells color")]
             public Material whiteCellMaterial;
+
             [Tooltip("Black cells color")]
             public Material blackCellMaterial;
         }
@@ -32,14 +32,18 @@ namespace Necro.Config.DefaultSettings
         [Serializable]
         public struct UnitSettings
         {
-            [Space(6f), Tooltip("White checkers color")]
+            [Space(6f), Tooltip("White checkers material")]
             public Material whiteUnitMaterial;
-            [Tooltip("Black checkers color")]
+
+            [Tooltip("Black checkers material")]
             public Material blackUnitMaterial;
-            [Space(6f), Tooltip("Lady's crown model")]
+
+            [Space(6f), Tooltip("Crown mesh for ladies")]
             public Mesh crownMesh;
-            [Tooltip("Lady's crown color")]
+
+            [Tooltip("Crown material")]
             public Material crownMaterial;
+
             [Range(0.5f, 800f)]
             public float speed;
         }
@@ -47,9 +51,10 @@ namespace Necro.Config.DefaultSettings
         [Serializable]
         public struct UiSettings
         {
-            [Space(6f), Tooltip("Put in this array sprites and random is going to chose some of them")]
+            [Space(6f), Tooltip("Random avatar will be selected from this list")]
             public Sprite[] avatarSprites;
-            [Tooltip("Sprite that is an arrow that show's whose turn is to play")]
+
+            [Tooltip("Arrow sprite that indicates the active player")]
             public Sprite arrowSprite;
         }
     }

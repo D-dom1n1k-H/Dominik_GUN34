@@ -21,7 +21,7 @@ namespace Necro.Interfaces.WorldSpaceCanvasController
         private void Awake()
         {
             SetupFromSettings();
-            
+
             for (int i = 0; i < _availableSprites.Count; i++)
             {
                 var rnd = UnityEngine.Random.Range(i, _availableSprites.Count);
@@ -63,14 +63,14 @@ namespace Necro.Interfaces.WorldSpaceCanvasController
 
         private void SetupFromSettings()
         {
-            _arrowSprite = _gameSettings.uiSettings.arrowSprite; 
+            _arrowSprite = _gameSettings.uiSettings.arrowSprite;
             arrowImage.sprite = _arrowSprite;
-            
+
             _avatarSprites = _gameSettings.uiSettings.avatarSprites;
 
             _availableSprites = new List<Sprite>(_avatarSprites);
         }
-        
+
         [Inject]
         private void Construct(GameSettings gameSettings)
         {
@@ -80,11 +80,12 @@ namespace Necro.Interfaces.WorldSpaceCanvasController
         private void ValidateDependencies()
         {
             if (_gameSettings == null)
-                throw new NullReferenceException(
-                    "<b>[WorldSpaceCanvasController]</b> _defaultSettings could not be injected!");
+                throw new ArgumentException("[WorldSpaceCanvasController] _gameSettings was not assigned or injected.",
+                    nameof(_gameSettings));
 
             if (arrowImage == null)
-                throw new NullReferenceException("<b>[WorldSpaceCanvasController]</b> arrowImage in null!");
+                throw new ArgumentException(
+                    "[WorldSpaceCanvasController] arrowImage was not assigned in the Inspector.", nameof(arrowImage));
         }
     }
 }
