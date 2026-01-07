@@ -4,39 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="046f749b-7f49-406f-8c95-90afc496fca3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Reps_/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Reps_/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_External/Plugins/Zenject/OptionalExtras/ReflectionBaking/Zenject-ReflectionBaking.csproj.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_External/Plugins/Zenject/OptionalExtras/Signals/Zenject-Signals.csproj.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_External/Plugins/Zenject/Source/Zenject.csproj.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_GlobalSettings.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_GlobalSettings.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scenes/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scenes/GameScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scripts/Controllers/SceneController.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scripts/Controllers/SceneController.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scripts/Managers/SceneController.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scripts/Managers/SceneController.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Settings.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Settings.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
-    </list>
+    <list default="true" id="fc3875bd-c9d0-4db0-b28f-85c9dff61245" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/54724222b7684530a2810ae1eac94ec7176000/05/0ff6f7ae/Time.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/_Project/Scripts/Units/PlayerMotion.cs" root0="FORCE_HIGHLIGHTING" />
-  </component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
-  </component>
   <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 4
+  &quot;associatedIndex&quot;: 2
 }</component>
-  <component name="ProjectId" id="337FGCDjw6dZRTE5hAnWu7fLX0s" />
+  <component name="ProjectId" id="36l5PonsdY1M4rI9DQyURktkTU8" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -45,22 +22,19 @@
   &quot;keyToString&quot;: {
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;FovAndGizmos&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;CodeCleanupOptionsPage&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2022.3.42f1\Editor\Unity.exe" />
-      <option name="PROGRAM_PARAMETERS" value="-projectPath &quot;C:\Users\kapae\Desktop\Game Development\Reps_&quot; -debugCodeOptimization" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\kapae\Desktop\Game Development\Reps_" />
+      <option name="PROGRAM_PARAMETERS" value="-projectPath &quot;C:\Users\kapae\Desktop\Game Development\MyProjects\TileMapHomework&quot; -debugCodeOptimization" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\kapae\Desktop\Game Development\MyProjects\TileMapHomework" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="ENV_FILE_PATHS" value="" />
@@ -71,8 +45,8 @@
     </configuration>
     <configuration name="Unit Tests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2022.3.42f1\Editor\Unity.exe" />
-      <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath &quot;C:\Users\kapae\Desktop\Game Development\Reps_&quot; -testResults Logs/results.xml -logFile Logs/Editor.log -testPlatform EditMode -debugCodeOptimization" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\kapae\Desktop\Game Development\Reps_" />
+      <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath &quot;C:\Users\kapae\Desktop\Game Development\MyProjects\TileMapHomework&quot; -testResults Logs/results.xml -logFile Logs/Editor.log -testPlatform EditMode -debugCodeOptimization" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\kapae\Desktop\Game Development\MyProjects\TileMapHomework" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="ENV_FILE_PATHS" value="" />
@@ -115,23 +89,13 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="046f749b-7f49-406f-8c95-90afc496fca3" name="Changes" comment="" />
-      <created>1758660108315</created>
+      <changelist id="fc3875bd-c9d0-4db0-b28f-85c9dff61245" name="Changes" comment="" />
+      <created>1765568297854</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1758660108315</updated>
-      <workItem from="1758660113182" duration="365000" />
-      <workItem from="1758660639462" duration="51000" />
-      <workItem from="1758660762994" duration="44000" />
-      <workItem from="1758660839237" duration="154000" />
-      <workItem from="1758661024566" duration="724000" />
-      <workItem from="1758724686944" duration="6244000" />
-      <workItem from="1760658091289" duration="1693000" />
-      <workItem from="1760725187794" duration="1391000" />
-      <workItem from="1767568000592" duration="1419000" />
-      <workItem from="1767617155532" duration="5156000" />
-      <workItem from="1767727036499" duration="5061000" />
-      <workItem from="1767804474766" duration="3500000" />
+      <updated>1765568297854</updated>
+      <workItem from="1765568300178" duration="1950000" />
+      <workItem from="1765645775166" duration="7068000" />
     </task>
     <servers />
   </component>
