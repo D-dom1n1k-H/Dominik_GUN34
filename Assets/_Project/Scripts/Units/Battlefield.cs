@@ -110,6 +110,8 @@ namespace Necro.World.Battlefield
             {
                 c.ResetSelect();
             }
+
+            _confirmMovementTextController.HideConfirmMovementText();
         }
 
         #endregion
@@ -450,6 +452,7 @@ namespace Necro.World.Battlefield
             if (_pendingTargetCell != null && _pendingFromCell != null && isConfirmed == true)
             {
                 _confirmMovementTextController.HideConfirmMovementText();
+                _playerController.ChangeIsMovementConfirmedField(true);
                 OnMoveRequestEvent?.Invoke(_pendingFromCell, _pendingTargetCell);
                 _pendingTargetCell = null;
                 _pendingFromCell = null;
@@ -462,6 +465,7 @@ namespace Necro.World.Battlefield
                 _pendingTargetCell = null;
                 _pendingFromCell = null;
                 HidePossibleMoves();
+                _confirmMovementTextController.HideConfirmMovementText();
                 _battleController.SetGameStatusModeToLastOne(gameObject);
             }
         }

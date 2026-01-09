@@ -61,7 +61,7 @@ namespace Necro.GamePlay.Units
                 Team = Team.Black;
             }
 
-            crown.SetActive(true);
+            crown.SetActive(false);
         }
 
         private void Update()

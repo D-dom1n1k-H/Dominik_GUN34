@@ -55,7 +55,6 @@ namespace Necro.GamePlay.Controllers.PlayerController
         private void OnEnable()
         {
             _battlefield.OnMoveRequestEvent += OnUnitMovementStarted;
-            _battleController.OnPlayerMovementConfirmedEvent += ChangeIsMovementConfirmedField;
 
             foreach (var t in _units)
             {
@@ -66,7 +65,6 @@ namespace Necro.GamePlay.Controllers.PlayerController
         private void OnDisable()
         {
             _battlefield.OnMoveRequestEvent -= OnUnitMovementStarted;
-            _battleController.OnPlayerMovementConfirmedEvent -= ChangeIsMovementConfirmedField;
 
             foreach (var t in _units)
             {
@@ -123,10 +121,7 @@ namespace Necro.GamePlay.Controllers.PlayerController
             _battleController.UnblockPlayerInput();
         }
 
-        private void ChangeIsMovementConfirmedField(bool isConfirmed)
-        {
-            _isMovementConfirmed = isConfirmed;
-        }
+        public void ChangeIsMovementConfirmedField(bool isConfirmed) => _isMovementConfirmed = isConfirmed;
 
         #endregion
 
@@ -148,11 +143,12 @@ namespace Necro.GamePlay.Controllers.PlayerController
                 throw new MissingReferenceException("[PlayerController] _battlefield was not assigned or injected.");
 
             if (_battleController == null)
-                throw new MissingReferenceException("[PlayerController] _battleController was not assigned or injected.");
+                throw new MissingReferenceException(
+                    "[PlayerController] _battleController was not assigned or injected.");
 
             if (_worldSpaceCanvasController == null)
-                throw new MissingReferenceException("[PlayerController] _worldSpaceCanvasController was not assigned or injected.");
-
+                throw new MissingReferenceException(
+                    "[PlayerController] _worldSpaceCanvasController was not assigned or injected.");
         }
 
         #endregion
