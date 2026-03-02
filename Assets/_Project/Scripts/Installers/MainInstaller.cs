@@ -1,5 +1,5 @@
 using System;
-using Korven.GamePlay.Controllers;
+using Korven.GamePlay.Services;
 using UnityEngine;
 using Zenject;
 
@@ -8,19 +8,19 @@ namespace Korven.GamePlay.Installers
     public class MainInstaller : MonoInstaller
     {
         [SerializeField]
-        private SceneController sceneController;
+        private SceneService sceneService;
 
         public override void InstallBindings()
         {
             ValidateDependencies();
             
-            Container.Bind<SceneController>().FromInstance(sceneController);
+            Container.Bind<SceneService>().FromInstance(sceneService);
         }
 
         private void ValidateDependencies()
         {
-            if (sceneController == null)
-                throw new NullReferenceException($"<b>[MainInstaller]</b> SceneController is missing!");
+            if (sceneService == null)
+                throw new NullReferenceException($"<b>[MainInstaller]</b> sceneService is missing!");
         }
         
         /* Именования модулей namespace'сов:

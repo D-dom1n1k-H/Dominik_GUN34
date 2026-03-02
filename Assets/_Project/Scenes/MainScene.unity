@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 1287467696}
   - component: {fileID: 1287467697}
   m_Layer: 0
-  m_Name: SceneController
+  m_Name: SceneService
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -354,7 +354,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1287467695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e10907882cfca6249abbbf2e3029670c, type: 3}
+  m_Script: {fileID: 11500000, guid: 53a5d30f277dcaa45a71ba31366d290e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1805843922
@@ -504,7 +504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee36663bcdb738c43aed9eb589e4f4d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneController: {fileID: 1287467697}
+  sceneService: {fileID: 1287467697}
 --- !u!4 &1879380500
 Transform:
   m_ObjectHideFlags: 0
