@@ -1,54 +1,9 @@
 fileFormatVersion: 2
-guid: 64a6e76bfcf249a47bce287e41eecdbc
+guid: 861994ea9185ce04c947fec1e693fd94
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material
-    second: {fileID: 2100000, guid: 34b3147fa2c669c4cbea0614fd7425f4, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.001
-    second: {fileID: 2100000, guid: f232a569716d9e84cb116a35605c4b0b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.002
-    second: {fileID: 2100000, guid: ea30c501ad8b5c54aa3e469379ff683c, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.003
-    second: {fileID: 2100000, guid: 9f6d281cb3e9b33429f1e6945873cec9, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.004
-    second: {fileID: 2100000, guid: eaa956838f6bf6246ab017492980b8b3, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Plastic.001
-    second: {fileID: 2100000, guid: 9c0065cfda68572408cc509cb0972342, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Plastic.002
-    second: {fileID: 2100000, guid: 78d8677a24e23df4badce4d985db5a4e, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Plastic.003
-    second: {fileID: 2100000, guid: 964c47b4175cd304cbe04ea472ae5152, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Rubber
-    second: {fileID: 2100000, guid: ad0aaa69b3deb4c4d8cc70deee3957b4, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

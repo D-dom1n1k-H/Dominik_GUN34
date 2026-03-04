@@ -95,18 +95,18 @@ namespace Korven.GamePlay.Units
         private void SetRightDirection() => SetNewDirection(-90f);
         private void SetLeftDirection() => SetNewDirection(90f);
         private void SetRandomDirection() => SetNewDirection(Random.Range(-180f, 180));
-
         private void SetAndDrawRays()
         {
-            _frontRay = new Ray(transform.position + new Vector3(0f, 0.02f, 0f), transform.forward);
-            _rightRay = new Ray(transform.position + new Vector3(0f, 0.02f, 0f), transform.right);
-            _leftRay = new Ray(transform.position + new Vector3(0f, 0.02f, 0f), -transform.right);
-            Debug.DrawRay(_frontRay.origin, _frontRay.direction * rayLenght, Color.green);
-            Debug.DrawRay(_rightRay.origin, _rightRay.direction * rayLenght, Color.cyan);
-            Debug.DrawRay(_leftRay.origin, _leftRay.direction * rayLenght, Color.cyan);
+            Vector3 rayOrigin = transform.position + Vector3.up * 0.02f;
+            
+            _frontRay = new Ray(rayOrigin, transform.forward);
+            _rightRay = new Ray(rayOrigin, transform.right);
+            _leftRay = new Ray(rayOrigin, -transform.right);
+            
+            Debug.DrawRay(rayOrigin, transform.forward * rayLenght, Color.green);
+            Debug.DrawRay(rayOrigin, transform.right * rayLenght, Color.cyan);
+            Debug.DrawRay(rayOrigin, -transform.right * rayLenght, Color.cyan);
         }
-
-
         private void Rotate()
         {
             _rotationProgress += rotationSpeed * Time.deltaTime;
