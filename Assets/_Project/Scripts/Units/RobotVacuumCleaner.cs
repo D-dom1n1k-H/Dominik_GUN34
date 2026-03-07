@@ -6,7 +6,7 @@ namespace Korven.GamePlay.Units
     public sealed class RobotVacuumCleaner : MonoBehaviour
     {
         [SerializeField, Range(0.1f, 1f), Space(10f), Header("========== RaycastSettings ==========")]
-        private float rayLenght = 0.2f;
+        private float rayLenght = 0.3f;
         [SerializeField]
         private LayerMask obstacleLayerMask;
 
